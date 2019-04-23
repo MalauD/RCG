@@ -9,7 +9,7 @@ module.exports = {
 
     CheckUserExisting : function(UserToCheck,MySqlConnection,callback){
         console.log('[MySql] Checking if user exist')
-        RetreiveAllDBUsers(MySqlConnection,(err,result) => {
+        RetreiveSpecificDBUser(UserToCheck.Mail,MySqlConnection,(err,result) => {
             if(err){
                 console.log('[MySql] Error !');
                 callback(undefined,err)
@@ -51,7 +51,7 @@ module.exports = {
 
     CheckUserLogin : function(UserToCheck,MySqlConnection,callback){
         console.log('[MySql] Checking an user login')
-        RetreiveAllDBUsers(MySqlConnection,(err,resp) =>{
+        RetreiveSpecificDBUser(UserToCheck.Mail,MySqlConnection,(err,resp) =>{
             if(err){
                 console.log('[MySql] Error !');
                 callback(err);
@@ -95,6 +95,29 @@ function RetreiveAllDBUsers(MySqlConnection,callback){
             return;
         }
            
+        let resp = [];
+        for(var k in rows){
+            resp.push(rows[k]);
+        }
+
+        console.log("[MySql] Found " + resp.length + " users");
+        
+        callback(undefined,resp);
+    })
+}
+
+function RetreiveSpecificDBUser(Mail,MySqlConnection,callback){
+    console.log('[MySql] Retreiving specific users from the DB');
+    //Make a DB request using the DB connection already created
+    const query = 'SELECT * FROM usersid WHERE mail = ?';
+    MySqlConnection.query(query,[Mail],(err,rows,field) =>{
+         //Call the CallBack with the result
+         if(err){
+            console.log('[MySql] Error !');
+            callback(err);
+            return;
+        }
+
         let resp = [];
         for(var k in rows){
             resp.push(rows[k]);

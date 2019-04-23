@@ -11,7 +11,15 @@
 #AccountName{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.5em;
+    color: black;
+
+    margin: 20px;
+}
+#AccountMail{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: italic;
+    font-size: 1.3em;
     color: black;
 
     margin: 20px;

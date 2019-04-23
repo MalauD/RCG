@@ -1,34 +1,39 @@
 
 var content;
 
-window.onload = function(){
-    var input = document.getElementById("search");
-
+$(document).ready(function() {
+    //load content of the page to show foods
     content = document.getElementsByClassName("Content")[0];
+    $('.topnav').load('./Views/Topnav.html',()=>{
+        //Auto select search when typing
+        $(document).keypress(()=>{
+            $("#search").focus();
+        })
+        //See if there is a content or redirect to index
+        $("#search").focus(()=>{
+            if($(".Content").length == 0)
+                $(location).attr('href', '/')
+        })
+        //Send Request for search value and show it
+        $("#search").keypress((event)=>{
+            //Check if the key pressed is ENTER
+            if(event.keyCode === 13){
+                event.preventDefault();
+                //Make a get request using AJAX
+                $.get('/foods/'+ $("#search").val(),(resp) =>{
+                    ShowResult(resp);
+                })
+            }
+        })
 
-    input.addEventListener("keyup", function(event) {
-        if (event.keyCode === 13) {   
-            event.preventDefault();
-          
-            console.log("ok");
-    
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.open( "GET",'/foods/'+input.value, false );
-            xmlHttp.send(null);
-
-            ShowResult(JSON.parse(xmlHttp.responseText));
-    
-        }
-      });
-
-    //Request account name and Display it (ex Name="Malo")
-    //Display the logout link
-    GetAccountName((Name)=> {
-        $("#AccountLink").text(Name);
-        $(".topnav").append('<a href="/Logout" style="float:right">Logout</a>')
+        //Request account name and Display it (ex Name="Malo")
+        //Display the logout link
+        GetAccountName((Name)=> {
+            $("#AccountLink").text(Name);
+            $(".topnav").append('<a href="/Logout" style="float:right">Logout</a>')
+        })
     })
-
-}
+})
 
 function ShowResult(json){
     while (content.firstChild) {

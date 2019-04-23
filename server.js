@@ -50,19 +50,23 @@ app.get('/foods/:id', (req,res) => {
     })
 });
 
-// ? Extend this method with /Account/User
 app.get('/Account',(req,res) =>{
     if(req.session.name)
         res.sendFile(__dirname + '/Public/Views/Account.html')
     else
         res.redirect('/Login')
-
 })
 
-// ? Uninon with /Account ?
 app.get('/Account/User/Name',(req,res)=>{
     if(req.session.name)
         res.json({Name:req.session.name});
+    else
+        res.sendStatus(403);
+})
+
+app.get('/Account/User',(req,res)=>{
+    if(req.session.name)
+        res.json({Name:req.session.name,Mail:req.session.mail});
     else
         res.sendStatus(403);
 })
@@ -100,7 +104,7 @@ app.get('/Login',(req,res) => {
         res.sendFile(__dirname +'/Public/Views/Login.html')
 })
 
-// TODO Extract in new class
+// TODO Optimize : current(628ms)
 app.post('/Login',(req,res)=>{
     //Check if user already logged in
     if(req.session.name)
@@ -127,5 +131,11 @@ app.get('/Logout',(req,res) => {
     res.redirect('/');
 })
 
+app.get('/Contributions',(req,res)=>{
+    if(req.session.name)
+        res.sendFile(__dirname +'/Public/Views/Contributions.html')
+    else
+        res.redirect('/');
+})
 
 https.createServer(options, app).listen(8080);
