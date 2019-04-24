@@ -1,29 +1,29 @@
 {
-  "name": "packages",
-  "version": "1.0.0",
-  "description": "RCG",
-  "main": "index.js",
-  "dependencies": {
-    "express": "^4.16.4",
-    "express-session": "^1.16.1",
-    "mysql": "^2.16.0",
-    "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-google": "^0.12.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MalauD/RCG.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MalauD/RCG/issues"
-  },
-  "homepage": "https://github.com/MalauD/RCG#readme"
+	"name": "packages",
+	"version": "1.0.0",
+	"description": "RCG",
+	"main": "index.js",
+	"dependencies": {
+		"express": "^4.16.4",
+		"express-session": "^1.16.1",
+		"mysql": "^2.16.0",
+		"path": "^0.12.7"
+	},
+	"devDependencies": {
+		"eslint": "^5.16.0",
+		"eslint-config-google": "^0.12.0"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MalauD/RCG.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/MalauD/RCG/issues"
+	},
+	"homepage": "https://github.com/MalauD/RCG#readme"
 }

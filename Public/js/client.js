@@ -45,6 +45,7 @@ function ShowResult(json) {
 	for (let i = 0; i < json.length; i++) {
 		const divCard = document.createElement('div');
 		divCard.setAttribute('class', 'Card');
+		divCard.setAttribute('idFoods', json[i].idFoods);
 
 		const img = document.createElement('img');
 		img.setAttribute('src', json[i].ImageLink);
@@ -53,10 +54,14 @@ function ShowResult(json) {
 		const p = document.createElement('p');
 		p.innerHTML = json[i].Name;
 		divCard.appendChild(p);
-
-		divCard.addEventListener('click', OnCardClick);
 		content.appendChild(divCard);
+		//Setup Event When a card is clicked
+		$('div[idFoods=' + json[i].idFoods + ']').click(function() {
+			OnCardClick($(this).attr('idFoods'));
+		});
 	}
 }
 
-function OnCardClick(event) {}
+function OnCardClick(IDFood) {
+	$(location).attr('href', '/food/' + IDFood);
+}

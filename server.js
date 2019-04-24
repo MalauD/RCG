@@ -45,11 +45,18 @@ app.get('/foods/name/:id', (req, res) => {
 		if (err) {
 			res.sendStatus(500);
 			res.end();
-			return;
-		}
-
-		res.json(result);
+		} else res.json(result);
 	});
+});
+
+app.get('/foods/id/:id', (req, res) => {
+	if (req.params.id != 'undefined')
+		Queries.QueryDBForFoodByID(req.params.id, (Failed, result) => {
+			if (Failed) {
+				res.sendStatus(500);
+				res.end();
+			} else res.json(result);
+		});
 });
 
 app.get('/Account', (req, res) => {

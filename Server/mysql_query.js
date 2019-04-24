@@ -65,6 +65,29 @@ class MySqlQuery {
 			callback(false, resp);
 		});
 	}
+
+	QueryDBForFoodByID(foodID, callback) {
+		const Query = 'SELECT * FROM foods WHERE idFoods = ?';
+		console.log('[MySql - Food] Requesting DB for food by ID');
+
+		this.connection.query(Query, foodID, (err, rows, field) => {
+			if (err) {
+				console.log(err);
+				this.connection.end();
+				callback(true);
+				return;
+			}
+
+			let resp = [];
+			for (var k in rows) {
+				resp.push(rows[k]);
+			}
+
+			console.log('[MySql - Food] Found ' + resp.length + ' results');
+
+			callback(false, resp);
+		});
+	}
 }
 
 module.exports = MySqlQuery;
