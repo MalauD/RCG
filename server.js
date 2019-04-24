@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/Public'));
 
 
-app.get('/foods/:id', (req,res) => {
+app.get('/foods/name/:id', (req,res) => {
     Queries.RequestFoodsByName(req.params.id,(err,result)=>{
         if(err){
             res.sendStatus(500);

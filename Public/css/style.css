@@ -7,7 +7,12 @@ body {
     color: #404040;
 }
 
+* {
+    box-sizing: border-box;
+  }
+
 .topnav {
+    overflow: hidden;
     background-color: white;
     margin: 0px 0px;
     padding: 2px 0.5vw;
@@ -20,6 +25,8 @@ body {
     position: sticky;
     top: 0;
 }
+
+
 
 .topnav a {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -39,8 +46,8 @@ body {
     display: block;
     color: #f2f2f2;
     padding: 2px 10px;
-    width: 10%;
-    height: 10%;
+    height: 8%;
+    width: 8%;
 }
 
 .topnav a:hover {
@@ -71,12 +78,32 @@ input[type=text]:focus {
     outline: none;
 }
 
+/* @media screen and (max-width: 1000px) {
+    .topnav{
+        flex-direction: column;
+    }
+    
+    .topnav a {
+        float:none;
+        font-size:4em;
+        width:100%;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+    }
+    input[type=text]{
+        float:none;
+        font-size: 4em;
+        width:100%;
+    }
+
+} */
+
 .Content {
     display: flex;
     flex-wrap: wrap;
 
     line-height: 0;
-
+    padding: 2px 25%;
     -webkit-column-count: 5;
     -webkit-column-gap: 0px;
     -moz-column-count: 5;
@@ -107,11 +134,11 @@ input[type=text]:focus {
 .Card:hover {
     border: 1px solid #777;
     height: 100%;
-    width: 50%;
+    width:25vh;
 }
 
 .Card p {
-    font-family: 'Charmonman', cursive;
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.7em;
     color: white;
     padding: 3px;

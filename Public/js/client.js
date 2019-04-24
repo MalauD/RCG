@@ -1,71 +1,66 @@
-
-var content;
+let content;
 
 $(document).ready(function() {
-    //load content of the page to show foods
-    content = document.getElementsByClassName("Content")[0];
-    $('.topnav').load('./Views/Topnav.html',()=>{
-        //Auto select search when typing
-        $(document).keypress(()=>{
-            $("#search").focus();
-        })
-        //See if there is a content or redirect to index
-        $("#search").focus(()=>{
-            if($(".Content").length == 0)
-                $(location).attr('href', '/')
-        })
-        //Send Request for search value and show it
-        $("#search").keypress((event)=>{
-            //Check if the key pressed is ENTER
-            if(event.keyCode === 13){
-                event.preventDefault();
-                //Make a get request using AJAX
-                $.get('/foods/'+ $("#search").val(),(resp) =>{
-                    ShowResult(resp);
-                })
-            }
-        })
+	// load content of the page to show foods
+	content = document.getElementsByClassName('Content')[0];
+	$('.topnav').load('./Views/Topnav.html', ()=>{
+		// Auto select search when typing
+		$(document).keypress(()=>{
+			$('#search').focus();
+		});
 
-        //Request account name and Display it (ex Name="Malo")
-        //Display the logout link
-        GetAccountName((Name)=> {
-            $("#AccountLink").text(Name);
-            $(".topnav").append('<a href="/Logout" style="float:right">Logout</a>')
-        })
-    })
-})
+		// See if there is a content or redirect to index
+		$('#search').focus(()=>{
+			if ($('.Content').length == 0)
+			{
+				$(location).attr('href', '/')
+            ;}
+		});
 
-function ShowResult(json){
-    while (content.firstChild) {
-        content.removeChild(content.firstChild);
-    }
+		// Send Request for search value and show it
+		$('#search').keypress((event)=>{
+			// Check if the key pressed is ENTER
+			if (event.keyCode === 13) {
+				event.preventDefault();
+				// Make a get request using AJAX
+				$.get('/foods/name/'+ $('#search').val(), (resp) =>{
+					ShowResult(resp);
+				});
+			}
+		});
 
-    for(var i = 0; i < json.length; i++) {
+		// Request account name and Display it (ex Name="Malo")
+		// Display the logout link
+		GetAccountName((Name)=> {
+			$('#AccountLink').text(Name);
+			$('.topnav').append('<a href="/Logout" style="float:right">Logout</a>');
+		});
+	});
+});
 
-        var divCard = document.createElement('div');
-        divCard.setAttribute('class', 'Card');
+function ShowResult(json) {
+	while (content.firstChild) {
+		content.removeChild(content.firstChild);
+	}
+
+	for (let i = 0; i < json.length; i++) {
+		const divCard = document.createElement('div');
+		divCard.setAttribute('class', 'Card');
 
 
-        var img = document.createElement("img");
-        img.setAttribute('src',json[i].ImageLink);
-        divCard.appendChild(img);
+		const img = document.createElement('img');
+		img.setAttribute('src', json[i].ImageLink);
+		divCard.appendChild(img);
 
-        var p = document.createElement("p");
-        p.innerHTML = json[i].Name;
-        divCard.appendChild(p);
+		const p = document.createElement('p');
+		p.innerHTML = json[i].Name;
+		divCard.appendChild(p);
 
-        var p1 = document.createElement("p1");
-        p1.setAttribute('class', 'desc');
-        p1.innerHTML = json[i].Content;
-        divCard.appendChild(p1);
-
-        divCard.addEventListener("click", OnCardClick);
-
-        content.appendChild(divCard);
-        
-    }
+		divCard.addEventListener('click', OnCardClick);
+		content.appendChild(divCard);
+	}
 }
 
-function OnCardClick(event){
-    
+function OnCardClick(event) {
+
 }
