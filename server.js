@@ -27,8 +27,7 @@ var Queries = new sqlquery();
 app.use(
 	session({
 		key: 'RCG Login Cookie',
-		secret:
-			'380980b2abba5eadd6215eff8b970cd15341566af16febf6ff9bde87ae2825db',
+		secret: '380980b2abba5eadd6215eff8b970cd15341566af16febf6ff9bde87ae2825db',
 		resave: false,
 		saveUninitialized: false,
 		cookie: { secure: true }
@@ -60,8 +59,7 @@ app.get('/foods/id/:id', (req, res) => {
 });
 
 app.get('/Account', (req, res) => {
-	if (req.session.name)
-		res.sendFile(__dirname + '/Public/Views/Account.html');
+	if (req.session.name) res.sendFile(__dirname + '/Public/Views/Account.html');
 	else res.redirect('/Login');
 });
 
@@ -71,8 +69,7 @@ app.get('/Account/User/Name', (req, res) => {
 });
 
 app.get('/Account/User', (req, res) => {
-	if (req.session.name)
-		res.json({ Name: req.session.name, Mail: req.session.mail });
+	if (req.session.name) res.json({ Name: req.session.name, Mail: req.session.mail });
 	else res.sendStatus(403);
 });
 
@@ -99,8 +96,9 @@ app.post('/Signup', (req, res) => {
 });
 
 app.get('/Login', (req, res) => {
-	if (req.session.name) res.redirect('/');
-	else res.sendFile(__dirname + '/Public/Views/Login.html');
+	//if (req.session.name) res.redirect('/');
+	//else res.sendFile(__dirname + '/Public/Views/Login.html');
+	res.end();
 });
 
 // TODO Optimize : current(628ms)
@@ -130,8 +128,7 @@ app.get('/Logout', (req, res) => {
 });
 
 app.get('/Contributions', (req, res) => {
-	if (req.session.name)
-		res.sendFile(__dirname + '/Public/Views/Contributions.html');
+	if (req.session.name) res.sendFile(__dirname + '/Public/Views/Contributions.html');
 	else res.redirect('/');
 });
 

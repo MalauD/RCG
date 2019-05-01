@@ -9,7 +9,7 @@ body {
 
 * {
     box-sizing: border-box;
-  }
+}
 
 .topnav {
     overflow: hidden;
@@ -56,7 +56,7 @@ body {
     border-bottom: 2px solid rgb(0, 92, 153);
 }
 
-input[type=text] {
+.FoodSearch {
     margin: 0 auto;
     color: rgb(87, 34, 15);
     float: left;
@@ -72,8 +72,8 @@ input[type=text] {
     padding: 4px 4px;
 }
 
-input[type=text]:hover,
-input[type=text]:focus {
+.FoodSearch:hover,
+.FoodSearch:focus {
     width: 80vw;
     outline: none;
 }
@@ -134,7 +134,7 @@ input[type=text]:focus {
 .Card:hover {
     border: 1px solid #777;
     height: 100%;
-    width:25vh;
+    width: 25vh;
 }
 
 .Card p {
@@ -159,3 +159,103 @@ input[type=text]:focus {
     display: block;
 }
 
+.AccountContent {
+    height: auto;
+    margin: 1% 15%;
+    padding: 20px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+#AccountName {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.5em;
+    color: black;
+
+    margin: 20px;
+}
+
+#AccountMail {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: italic;
+    font-size: 1.3em;
+    color: black;
+
+    margin: 20px;
+}
+
+.LoginDiv {
+    margin: 10%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 60px;
+    overflow-wrap: hidden;
+    box-sizing: border-box;
+}
+
+.LoginFields {
+    width: 100%;
+    color: rgb(87, 34, 15);
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    color: rgb(51);
+    border: none;
+    border-bottom: 2px solid rgb(87, 34, 15);
+    padding: 12px 10px;
+    margin: 20px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    transition: border-bottom 1s;
+}
+
+.LoginFields:hover,
+.LoginFields:focus {
+    outline: none;
+    border-bottom: 3px solid rgb(78, 165, 28);
+}
+
+.LoginButton {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2em;
+    width: 25%;
+    background-color: rgb(102, 214, 37);
+    color: white;
+    padding: 14px 20px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.LoginButton:hover {
+    background-color: rgb(107, 224, 40);
+}
+
+.LoginLabel {
+    font-family: 'Open Sans', sans-serif;
+    color: grey;
+    font-size: 1.1em;
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 20px 20px;
+    margin-left: 0;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.LoginTitle {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 2em;
+    text-align: center;
+    color: grey;
+}
+
+.LoginLink {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+    margin-left: 20px;
+}
