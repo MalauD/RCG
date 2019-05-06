@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 class FoodElement extends React.Component {
 	constructor(props) {
@@ -16,7 +17,8 @@ class FoodElement extends React.Component {
 	};
 
 	OnElementClicked = () => {
-		this.props.OnClickFood(this.props.idFoods);
+		//Redirect to /Food/<idFoods>
+		this.props.history.push('/Food/' + this.props.idFoods);
 	};
 }
-export default FoodElement;
+export default withRouter(FoodElement);

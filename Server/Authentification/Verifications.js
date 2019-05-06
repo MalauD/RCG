@@ -1,3 +1,5 @@
+var yup = require('yup');
+
 module.exports = {
 	/**
 	 *    This function check if Credentials are well written (empty for exemple)
@@ -56,7 +58,23 @@ module.exports = {
 		}
 
 		callback();
-	}
+	},
+
+	CreateFormShem: yup.object().shape({
+		Name: yup.string().required(),
+		RCG: yup
+			.number()
+			.required()
+			.positive()
+			.integer()
+			.min(0)
+			.max(20),
+		Recipe: yup
+			.string()
+			.required()
+			.min(10)
+			.max(2000)
+	})
 };
 
 function emailIsValid(email) {

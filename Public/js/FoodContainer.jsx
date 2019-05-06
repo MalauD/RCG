@@ -21,7 +21,6 @@ class FoodContainer extends React.Component {
 						ImageLink={fooditem.ImageLink}
 						key={fooditem.idFoods}
 						idFoods={fooditem.idFoods}
-						OnClickFood={this.ElementChildClicked}
 					/>
 				);
 			});
@@ -37,12 +36,6 @@ class FoodContainer extends React.Component {
 		//This function is called by the parent with param the api response
 		//This line will refresh the state variable for the Api result.
 		this.setState({ ApiResult: res });
-	};
-
-	ElementChildClicked = FoodIdOfElement => {
-		//When an element of the container is clicked (on the div)
-		// FoodIDOfElement : the idFood from the api response (In the DB)
-		// TODO Display food details
 	};
 }
 

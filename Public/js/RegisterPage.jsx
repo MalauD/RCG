@@ -53,7 +53,7 @@ class RegisterPage extends React.Component {
 					style={this.state.InputCSSError.Password}
 					value={this.state.PasswordField}
 					onChange={this.OnPasswordChanged}
-					type="text"
+					type="password"
 					id="lpassword"
 					className="LoginFields"
 					name="password"

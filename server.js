@@ -6,6 +6,33 @@ var https = require('https');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+var multer = require('multer');
+var uuid = require('uuid');
+
+var storage = multer.diskStorage({
+	destination: function(req, file, callback) {
+		callback(null, __dirname + '/Public/FoodImage/');
+	},
+	filename: function(req, file, callback) {
+		callback(null, uuid.v4() + file.originalname);
+	}
+});
+
+function fileFilter(req, file, cb) {
+	var ext = path.extname(file.originalname);
+	if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+		return cb(new Error('File is not an image'));
+	}
+	cb(null, true);
+}
+
+var upload = multer({
+	fileFilter,
+	storage,
+	limits: {
+		fileSize: 1024 * 1024
+	}
+});
 
 const sqlquery = require('./Server/mysql_query.js');
 const DBUsers = require('./Server/Authentification/mysql_query_users.js');
@@ -58,9 +85,14 @@ app.get('/foods/id/:id', (req, res) => {
 		});
 });
 
-app.get('/Account', (req, res) => {
-	if (req.session.name) res.sendFile(__dirname + '/Public/Views/Account.html');
-	else res.redirect('/Login');
+app.get('/foods/unchecked', (req, res) => {
+	if (req.session.name)
+		Queries.QueryDBForFoodUnchecked((Failed, result) => {
+			if (Failed) {
+				res.sendStatus(500);
+				res.end();
+			} else res.json(result);
+		});
 });
 
 app.get('/Account/User/Name', (req, res) => {
@@ -69,13 +101,8 @@ app.get('/Account/User/Name', (req, res) => {
 });
 
 app.get('/Account/User', (req, res) => {
-	if (req.session.name) res.json({ Name: req.session.name, Mail: req.session.mail });
+	if (req.session.name) res.json({ Name: req.session.name, Mail: req.session.mail, Rank: req.session.Rank });
 	else res.sendStatus(403);
-});
-
-app.get('/Signup', (req, res) => {
-	if (req.session.name) res.redirect('/');
-	else res.sendFile(__dirname + '/Public/Views/SignUp.html');
 });
 
 app.post('/Signup', (req, res) => {
@@ -95,12 +122,6 @@ app.post('/Signup', (req, res) => {
 	}
 });
 
-app.get('/Login', (req, res) => {
-	//if (req.session.name) res.redirect('/');
-	//else res.sendFile(__dirname + '/Public/Views/Login.html');
-	res.end();
-});
-
 // TODO Optimize : current(628ms)
 app.post('/Login', (req, res) => {
 	//Check if user already logged in
@@ -112,6 +133,8 @@ app.post('/Login', (req, res) => {
 			req.session.mail = User.Mail;
 			//Save hash of the password
 			req.session.hash = User.Hash;
+			if (!User.rank) User.rank = 0;
+			req.session.Rank = User.Rank;
 			console.log('[Session] User save in Session');
 			//send a Created (201) to the client
 			res.sendStatus(201);
@@ -127,9 +150,31 @@ app.get('/Logout', (req, res) => {
 	res.redirect('/');
 });
 
-app.get('/Contributions', (req, res) => {
-	if (req.session.name) res.sendFile(__dirname + '/Public/Views/Contributions.html');
-	else res.redirect('/');
+app.post('/Create', upload.single('ImageFile'), (req, res) => {
+	VerifCredentials.CreateFormShem.validate(req.body)
+		.then(() => {
+			if (req.file && req.session.name) {
+				console.log('[Create - Food] Got a new food submit');
+				console.log('[Create - Food]  Name:' + req.body.Name);
+				console.log('[Create - Food]  RCG:' + req.body.RCG);
+				console.log('[Create - Food] Image saved as ' + req.file.filename);
+				let FoodImageLink = '/FoodImage/' + req.file.filename;
+				console.log('[Create - Food] Image saved in ' + FoodImageLink);
+				Queries.AddFoodToPendingDB(req.body, req.session.hash, FoodImageLink, err => {
+					if (err) {
+						res.json({ CreateStatus: false });
+						console.log(err);
+						return;
+					}
+					res.json({ CreateStatus: true });
+					return;
+				});
+			}
+			res.json({ CreateStatus: false });
+		})
+		.catch(err => {
+			console.log('[Create - Food] Error ' + err.errors);
+		});
 });
 
 https.createServer(options, app).listen(8080);

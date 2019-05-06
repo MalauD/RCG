@@ -43,9 +43,9 @@ class MySqlQuery {
 	}
 
 	QueryDBForFood(foodname, callback) {
-		const Query = 'SELECT * FROM foods';
+		const Query = 'SELECT * FROM foods WHERE MATCH(Name,Content) AGAINST(? IN BOOLEAN MODE)';
 		console.log('[MySql - Food] Requesting DB for food');
-		this.connection.query(Query, foodname, (err, rows, field) => {
+		this.connection.query(Query, [foodname], (err, rows, field) => {
 			if (err) {
 				console.log(err);
 				this.connection.end();
@@ -53,16 +53,9 @@ class MySqlQuery {
 				return;
 			}
 
-			let resp = [];
-			for (var k in rows) {
-				if (rows[k].Name.includes(foodname)) {
-					resp.push(rows[k]);
-				}
-			}
+			console.log('[MySql - Food] Found ' + rows.length + ' results');
 
-			console.log('[MySql - Food] Found ' + resp.length + ' results');
-
-			callback(false, resp);
+			callback(false, rows);
 		});
 	}
 
@@ -86,6 +79,50 @@ class MySqlQuery {
 			console.log('[MySql - Food] Found ' + resp.length + ' results');
 
 			callback(false, resp);
+		});
+	}
+
+	QueryDBForFoodUnchecked(callback) {
+		const Query = 'SELECT * FROM foodsnew';
+		console.log('[MySql - Food] Requesting DB for unchecked');
+
+		this.connection.query(Query, (err, rows, field) => {
+			if (err) {
+				console.log(err);
+				this.connection.end();
+				callback(true);
+				return;
+			}
+
+			let resp = [];
+			for (var k in rows) {
+				resp.push(rows[k]);
+			}
+
+			console.log('[MySql - Food] Found ' + resp.length + ' results');
+
+			callback(false, resp);
+		});
+	}
+
+	AddFoodToPendingDB(food, userhash, foodImage, callback) {
+		console.log('[MySql - Food] Appending meal to the DB');
+		var payload = {
+			Name: food.Name,
+			RCG: food.RCG,
+			Content: food.Recipe,
+			ImageLink: foodImage,
+			userhash: userhash
+		};
+		const Query = 'INSERT INTO foodsnew SET ?';
+		this.connection.query(Query, payload, (err, rows) => {
+			if (err) {
+				console.log('[MySql - Food] Error !');
+				callback(err);
+				return;
+			}
+			console.log('[MySql - Food] Meal saved in DB');
+			callback();
 		});
 	}
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import AccountLink from './AccountLink';
+import { withRouter, Link } from 'react-router-dom';
 
 class TopNav extends React.Component {
 	constructor(props) {
@@ -14,21 +15,26 @@ class TopNav extends React.Component {
 	render = () => {
 		return (
 			<div className="topnav">
-				<img src="Logo.png" alt="logo" />
-
+				{/* <img src="/Logo.png" alt="logo" onClick={this.OnLogoClick} /> */}
+				<p className="TopnavTitle" onClick={this.OnLogoClick}>
+					RCG
+				</p>
 				<input
 					type="text"
 					id="search"
 					className="FoodSearch"
 					name="Search"
 					placeholder="Search for food and way more !"
+					autoComplete="off"
 					value={this.state.inputSearch}
 					onKeyPress={this.HandleKeyPressed}
 					onChange={this.HandleSearchChange}
 				/>
-				<a href="/Contributions" style={{ float: 'right' }}>
-					Contributions
-				</a>
+				<Link to="/Contrib">
+					<a className="topnavLink " style={{ float: 'right' }}>
+						Contributions
+					</a>
+				</Link>
 				<AccountLink />
 			</div>
 		);
@@ -42,21 +48,14 @@ class TopNav extends React.Component {
 
 	HandleKeyPressed = e => {
 		if (e.key == 'Enter') {
-			//Check when the key enter is pressed and make a GET Call to
-			//the Api
-			fetch('/foods/name/' + this.state.inputSearch)
-				.then(res => res.json())
-				.then(
-					result => {
-						//Call the parent method GotApiRep
-						this.props.GotApiRep(result);
-					},
-					err => {
-						console.log(err);
-					}
-				);
+			//Check when the key enter is pressed and redirect the page with search fields
+			this.props.history.push('/Search?q=' + this.state.inputSearch);
 		}
+	};
+
+	OnLogoClick = () => {
+		this.props.history.push('/');
 	};
 }
 
-export default TopNav;
+export default withRouter(TopNav);
