@@ -1,5 +1,5 @@
 import React from 'react';
-import FoodContainer from './FoodContainer';
+import FoodContainer from '/home/pi/RCGWebsite/Public/js/Components/FoodPage/FoodContainer';
 import { Link } from 'react-router-dom';
 
 class ContribPage extends React.Component {

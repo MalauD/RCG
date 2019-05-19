@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var fs = require('fs');
+var http = require('http');
 var https = require('https');
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -76,17 +77,68 @@ app.get('/foods/name/:id', (req, res) => {
 });
 
 app.get('/foods/id/:id', (req, res) => {
-	if (req.params.id != 'undefined')
-		Queries.QueryDBForFoodByID(req.params.id, (Failed, result) => {
+	if (req.params.id != 'undefined') {
+		//if the food requested is unchecked, see if the rank is ok to acces this data if not send 500
+		console.log(req.query.Checked + req.session.Rank);
+		if (req.query.Checked == 'false' && !(req.session.Rank < 100) && !req.session.name) {
+			res.sendStatus(500);
+			return;
+		}
+
+		Queries.QueryDBForFoodByID(req.params.id, req.query.Checked, (Failed, result) => {
 			if (Failed) {
 				res.sendStatus(500);
 				res.end();
 			} else res.json(result);
 		});
+	} else {
+		res.sendStatus(500);
+	}
+});
+
+app.post('/foods/vote/', (req, res) => {
+	if (req.params.id != 'undefined') {
+		//Verify if the user is allowed to perform this action
+		if (!req.session.name) {
+			res.json({ error: 'User not logged' }).sendStatus(500);
+			return;
+		}
+		//TODO verif vote using YUP
+		//verify if the vote already exist
+		Authentification.CheckVoteExisting(
+			req.session.hash,
+			req.body.vote,
+			Queries.connection,
+			(err, IsExisting, VoteDB, votesarray) => {
+				if (err) {
+					console.log(err);
+					res.sendStatus(500);
+					return;
+				}
+				//if the vote exist send it to the client
+				if (IsExisting) res.json({ error: VoteDB, IsExisting }).sendStatus(500);
+				else {
+					//if aray is empty create it
+					if (!votesarray) votesarray = [];
+
+					votesarray.push(req.body.vote);
+					//Add element to array and the put it in DB
+					Authentification.AddVotesToDB(votesarray, req.session.hash, Queries.connection, err => {
+						if (err) {
+							console.log(err);
+							res.json({ error: 'Error when appending vote' }).sendStatus(500);
+						}
+						res.sendStatus(200);
+						return;
+					});
+				}
+			}
+		);
+	}
 });
 
 app.get('/foods/unchecked', (req, res) => {
-	if (req.session.name)
+	if (req.session.name && req.session.Rank > 100)
 		Queries.QueryDBForFoodUnchecked((Failed, result) => {
 			if (Failed) {
 				res.sendStatus(500);
@@ -151,6 +203,7 @@ app.get('/Logout', (req, res) => {
 });
 
 app.post('/Create', upload.single('ImageFile'), (req, res) => {
+	req.body.Recipe = JSON.parse(req.body.Recipe);
 	VerifCredentials.CreateFormShem.validate(req.body)
 		.then(() => {
 			if (req.file && req.session.name) {
@@ -169,6 +222,7 @@ app.post('/Create', upload.single('ImageFile'), (req, res) => {
 					res.json({ CreateStatus: true });
 					return;
 				});
+				return;
 			}
 			res.json({ CreateStatus: false });
 		})
@@ -177,4 +231,5 @@ app.post('/Create', upload.single('ImageFile'), (req, res) => {
 		});
 });
 
+//! For demo purpose (http)
 https.createServer(options, app).listen(8080);

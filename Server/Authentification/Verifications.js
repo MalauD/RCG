@@ -70,10 +70,17 @@ module.exports = {
 			.min(0)
 			.max(20),
 		Recipe: yup
-			.string()
+			.array()
+			.of(
+				yup.object({
+					Recipe: yup
+						.string()
+						.min(10)
+						.max(500)
+						.required('Meal recipe is required')
+				})
+			)
 			.required()
-			.min(10)
-			.max(2000)
 	})
 };
 

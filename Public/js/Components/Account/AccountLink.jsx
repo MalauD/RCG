@@ -12,9 +12,9 @@ class AccountLink extends React.Component {
 
 	render = () => {
 		return (
-			<div class="dropdown">
+			<div className="dropdown">
 				<Link to="/Account">
-					<button class="dropbtn">{this.state.APIName}</button>
+					<button className="dropbtn">{this.state.APIName}</button>
 				</Link>
 				<div className="dropdown-content">
 					<Link
@@ -33,14 +33,14 @@ class AccountLink extends React.Component {
 					>
 						Admin
 					</Link>
-					<Link
+					<p
 						className="topnavLink"
 						id="AccountLink"
 						onClick={this.Logout}
 						style={{ float: 'right', width: '100% ' }}
 					>
 						Logout
-					</Link>
+					</p>
 				</div>
 			</div>
 		);

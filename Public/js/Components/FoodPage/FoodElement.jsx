@@ -10,7 +10,11 @@ class FoodElement extends React.Component {
 		//render using the props (Like the api contnent)
 		return (
 			<div className="Card" onClick={this.OnElementClicked}>
+				<div className="CardRCG">
+					<p>{this.props.RCG}</p>
+				</div>
 				<img src={this.props.ImageLink} />
+
 				<p>{this.props.Name}</p>
 			</div>
 		);
@@ -18,7 +22,8 @@ class FoodElement extends React.Component {
 
 	OnElementClicked = () => {
 		//Redirect to /Food/<idFoods>
-		this.props.history.push('/Food/' + this.props.idFoods);
+		//make a query string if the food is checked or not
+		this.props.history.push('/Food/' + this.props.idFoods + '/Food?Checked=' + this.props.IsChecked);
 	};
 }
 export default withRouter(FoodElement);

@@ -1,5 +1,5 @@
 import React from 'react';
-import FoodContainer from './FoodContainer';
+import FoodContainer from '/home/pi/RCGWebsite/Public/js/Components/FoodPage/FoodContainer';
 
 class AdminPage extends React.Component {
 	constructor(props) {
@@ -22,8 +22,8 @@ class AdminPage extends React.Component {
 			.then(res => res.json())
 			.then(
 				result => {
-					//Call the food container method to show API result
-					this.child.current.ShowResult(result);
+					//Call the food container method to show API result and specify that it is uncheck food to do the proper redirection
+					this.child.current.ShowResult(result, false);
 				},
 				err => {
 					console.log(err);

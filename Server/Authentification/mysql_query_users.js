@@ -6,6 +6,7 @@ module.exports = {
 	//name
 	//mail
 	//userhash
+	//votes
 
 	CheckUserExisting: function(UserToCheck, MySqlConnection, callback) {
 		console.log('[MySql] Checking if user exist');

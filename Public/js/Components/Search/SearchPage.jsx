@@ -1,7 +1,6 @@
 import React from 'react';
 import queryString from 'query-string';
-import TopNav from './TopNav';
-import FoodContainer from './FoodContainer';
+import FoodContainer from '/home/pi/RCGWebsite/Public/js/Components/FoodPage/FoodContainer';
 
 class SearchPage extends React.Component {
 	constructor(props) {
@@ -30,17 +29,7 @@ class SearchPage extends React.Component {
 	APISearch = () => {
 		//Get qury params and make an api search
 		const values = queryString.parse(this.props.location.search);
-		fetch('/foods/name/' + values.q)
-			.then(res => res.json())
-			.then(
-				result => {
-					//Call the food container method to show API result
-					this.child.current.ShowResult(result);
-				},
-				err => {
-					console.log(err);
-				}
-			);
+		this.child.current.MakeSearch(values.q);
 	};
 }
 

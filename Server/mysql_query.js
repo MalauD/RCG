@@ -4,7 +4,7 @@ class MySqlQuery {
 	constructor() {
 		this.CreateConnection();
 		this.ConnectToDB(error => {
-			if (error) throw error;
+			if (error) console.log(error);
 		});
 	}
 
@@ -59,9 +59,12 @@ class MySqlQuery {
 		});
 	}
 
-	QueryDBForFoodByID(foodID, callback) {
-		const Query = 'SELECT * FROM foods WHERE idFoods = ?';
-		console.log('[MySql - Food] Requesting DB for food by ID');
+	QueryDBForFoodByID(foodID, IsFoodChecked = 'true', callback) {
+		let Query = '';
+		if (IsFoodChecked == 'true') Query = 'SELECT * FROM foods WHERE idFoods = ?';
+		else if (IsFoodChecked == 'false') Query = 'SELECT * FROM foodsnew WHERE idFoods = ?';
+
+		console.log('[MySql - Food] Requesting DB for food by ID with Checked = ' + IsFoodChecked);
 
 		this.connection.query(Query, foodID, (err, rows, field) => {
 			if (err) {
@@ -71,14 +74,11 @@ class MySqlQuery {
 				return;
 			}
 
-			let resp = [];
-			for (var k in rows) {
-				resp.push(rows[k]);
-			}
+			rows[0].Content = JSON.parse(rows[0].Content);
 
-			console.log('[MySql - Food] Found ' + resp.length + ' results');
+			console.log('[MySql - Food] Found food for requested id');
 
-			callback(false, resp);
+			callback(false, rows[0]);
 		});
 	}
 
@@ -96,6 +96,8 @@ class MySqlQuery {
 
 			let resp = [];
 			for (var k in rows) {
+				//console.log(rows[k].Content);
+				rows[k].Content = JSON.parse(rows[k].Content);
 				resp.push(rows[k]);
 			}
 
@@ -110,11 +112,13 @@ class MySqlQuery {
 		var payload = {
 			Name: food.Name,
 			RCG: food.RCG,
-			Content: food.Recipe,
+			Content: JSON.stringify(food.Recipe),
 			ImageLink: foodImage,
 			userhash: userhash
 		};
-		const Query = 'INSERT INTO foodsnew SET ?';
+
+		// ! This for demo PURPOSE ONLY (foods => foodsnew)
+		const Query = 'INSERT INTO foods SET ?';
 		this.connection.query(Query, payload, (err, rows) => {
 			if (err) {
 				console.log('[MySql - Food] Error !');

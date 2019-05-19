@@ -1,5 +1,4 @@
 import React from 'react';
-import FoodContainer from './FoodContainer';
 
 class MainPage extends React.Component {
 	constructor(props) {

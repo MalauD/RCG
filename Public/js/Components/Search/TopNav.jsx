@@ -1,5 +1,5 @@
 import React from 'react';
-import AccountLink from './AccountLink';
+import AccountLink from '/home/pi/RCGWebsite/Public/js/Components/Account/AccountLink';
 import { withRouter, Link } from 'react-router-dom';
 
 class TopNav extends React.Component {
@@ -16,24 +16,24 @@ class TopNav extends React.Component {
 		return (
 			<div className="topnav">
 				{/* <img src="/Logo.png" alt="logo" onClick={this.OnLogoClick} /> */}
-				<p className="TopnavTitle" onClick={this.OnLogoClick}>
-					RCG
-				</p>
-				<input
-					type="text"
-					id="search"
-					className="FoodSearch"
-					name="Search"
-					placeholder="Search for food and way more !"
-					autoComplete="off"
-					value={this.state.inputSearch}
-					onKeyPress={this.HandleKeyPressed}
-					onChange={this.HandleSearchChange}
-				/>
+				<div className="ConboRow">
+					<img src="RCG.png" onClick={this.OnLogoClick} />
+					<input
+						type="text"
+						id="search"
+						className="FoodSearch"
+						name="Search"
+						placeholder="Search for food and way more !"
+						autoComplete="off"
+						value={this.state.inputSearch}
+						onKeyPress={this.HandleKeyPressed}
+						onChange={this.HandleSearchChange}
+					/>
+				</div>
 				<Link to="/Contrib">
-					<a className="topnavLink " style={{ float: 'right' }}>
+					<p className="topnavLink " style={{ float: 'right' }}>
 						Contributions
-					</a>
+					</p>
 				</Link>
 				<AccountLink />
 			</div>
@@ -54,6 +54,7 @@ class TopNav extends React.Component {
 	};
 
 	OnLogoClick = () => {
+		console.log('Clicked');
 		this.props.history.push('/');
 	};
 }

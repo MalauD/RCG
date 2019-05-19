@@ -4,35 +4,44 @@ html {
 
 body {
     margin: 0px 0px;
-    color: #404040;
+    color: #614A41;
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
 }
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: baseline;
+    text-align: inherit;
+    color: inherit;
+    background: transparent;
 }
 
 .topnav {
+    z-index: 2;
     background-color: white;
     margin: 0px 0px;
     padding: 2px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
-    border-bottom-color: #404040;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+    border-bottom-color: #614A41;
     position: -webkit-sticky;
     position: sticky;
     top: 0;
+    font-size: 16px;
 }
 
 
 
 .topnavLink {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.3em;
-    float: left;
     display: block;
-    color: grey;
+    color: #614A41;
     text-align: center;
     padding: 7px 16px;
     text-decoration: none;
@@ -40,19 +49,11 @@ body {
     cursor: pointer;
 }
 
-.topnav img {
-    float: left;
-    display: block;
-    color: #f2f2f2;
-    padding: 2px 10px;
-    height: 8%;
-    width: 8%;
-}
 
 .topnavLink:hover {
     color: black;
     border: none;
-    border-bottom: 2px solid rgb(0, 92, 153);
+    border-bottom: 2px solid #FA672A;
 }
 
 .TopnavTitle {
@@ -62,255 +63,72 @@ body {
 }
 
 .FoodSearch {
-    margin: 0 auto;
-    color: rgb(87, 34, 15);
-    float: left;
-    font-family: 'Open Sans', sans-serif;
+    margin: 0 40px;
+    font-size: 16px;
+    color: grey;
     text-align: center;
-    font-size: 1.3em;
     color: rgb(51);
     width: 50vw;
+    flex: 1;
     border: none;
     border-bottom: 2px solid rgb(87, 34, 15);
-    -webkit-transition: width 2s;
-    transition: width 2s;
+    -webkit-transition: border-color 2s;
+    transition: border-color 2s;
     padding: 4px 4px;
 }
 
 .FoodSearch:hover,
 .FoodSearch:focus {
-    width: 80vw;
     outline: none;
+    border-color: #6BCE6B;
 }
 
-/* @media screen and (max-width: 1000px) {
-    .topnav{
-        flex-direction: column;
-    }
-    
-    .topnav a {
-        float:none;
-        font-size:4em;
-        width:100%;
-        border-bottom-style: solid;
-        border-bottom-width: 2px;
-    }
-    input[type=text]{
-        float:none;
-        font-size: 4em;
-        width:100%;
-    }
+.ConboRow {
+    display: inherit;
+    flex-direction: inherit;
+    align-items: center;
+    justify-content: flex-start;
+}
 
-} */
-
-.Content {
+.FoodContainer {
+    padding: 0px 15%;
+    height: auto;
+    overflow: auto;
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-
-    line-height: 0;
-    padding: 2px 25%;
-    -webkit-column-count: 5;
-    -webkit-column-gap: 0px;
-    -moz-column-count: 5;
-    -moz-column-gap: 0px;
-    column-count: 5;
-    column-gap: 0px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: space-around;
 }
 
-
-.Card {
-    margin: 40px;
-    padding-bottom: 20px;
-    border: 1px solid #ccc;
-    background-color: rgb(87, 34, 15);
-    float: left;
-    height: auto;
-    width: 20vh;
-    border-radius: 10px;
-    transition: width 0.6s, height 0.7s;
+.Spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.Card img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px 10px 0px 0px;
-}
-
-.Card:hover {
-    border: 1px solid #777;
-    height: 100%;
-    width: 25vh;
-}
-
-.Card p {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.7em;
-    color: white;
-    padding: 3px;
-    text-align: center;
-}
-
-.desc {
-    display: none;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.2em;
-    color: white;
-    padding: 10px;
-    text-align: center;
+.ConboRow img {
     margin: 10px;
+    width: auto;
+    height: 3.5vw;
 }
 
-.Card:hover .desc {
-    display: block;
-}
-
-.AccountContent {
-    height: auto;
-    margin: 1% 15%;
-    padding: 20px;
-
-    border-radius: 10px;
-
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-#AccountName {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: bold;
-    font-size: 1.5em;
-    color: black;
-
-    margin: 20px;
-}
-
-#AccountMail {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight: italic;
-    font-size: 1.3em;
-    color: black;
-
-    margin: 20px;
-}
-
-.LoginDiv {
-    margin: 10%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 60px;
-    overflow-wrap: hidden;
-    box-sizing: border-box;
-}
-
-.LoginFields {
-    width: 100%;
-    color: rgb(87, 34, 15);
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.2em;
-    color: rgb(51);
-    border: none;
-    border-bottom: 2px solid rgb(87, 34, 15);
-    padding: 12px 10px;
-    margin: 20px 0;
-    display: inline-block;
-    box-sizing: border-box;
-    transition: border-bottom 1s;
-}
-
-.LoginFields:hover,
-.LoginFields:focus {
-    outline: none;
-    border-bottom: 3px solid rgb(78, 165, 28);
-}
-
-.LoginButton {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.2em;
-    width: 25%;
-    background-color: rgb(102, 214, 37);
-    color: white;
-    padding: 14px 20px;
-    margin: 20px 0;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.LoginButton:hover {
-    background-color: rgb(107, 224, 40);
-}
-
-.LoginLabel {
-    font-family: 'Open Sans', sans-serif;
-    color: grey;
-    font-size: 1.1em;
-    display: inline-block;
-    box-sizing: border-box;
-    margin: 20px 20px;
-    margin-left: 0;
-    margin-top: 30px;
-    margin-bottom: 5px;
-}
-
-.LoginTitle {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 2em;
-    text-align: center;
-    color: grey;
-}
-
-.LoginLink {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1em;
-    margin-left: 20px;
-}
-
-.FoodDetailName {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1em;
-    margin-left: 20px;
-}
-
-.ContribTitle {
-    font-family: 'Cinzel', serif;
-    font-size: 2em;
-    text-align: center;
-}
-
-.CreateContent {
-
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.CreateElement {
-    font-family: 'Open Sans', sans-serif;
-    padding: 10px;
-    margin-bottom: 20px;
-    resize: none;
-}
-
-.SpanError {
-    font-family: 'Open Sans', sans-serif;
-    color: red;
-
-}
-
-.UploadMeal {
-    font-family: 'Open Sans', sans-serif;
-
+.AccountContent input[type=text],
+.AccountContent input[type=number],
+.AccountContent textarea {
+    border: 1px solid grey;
 }
 
 /* Style The Dropdown Button */
 .dropbtn {
-    color: grey;
+    font-size: 16px;
     padding: 16px;
     border: none;
     cursor: pointer;
     background-color: #ffffff;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.3em;
+    font-family: inherit;
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -340,7 +158,7 @@ body {
 
 /* Change color of dropdown links on hover */
 .dropdown-content Link:hover {
-    background-color: #ffffff88
+    background-color: #00AD96;
 }
 
 /* Show the dropdown menu on hover */
@@ -351,4 +169,425 @@ body {
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
     color: rgb(0, 0, 0)
+}
+
+
+@media screen and (max-width: 1000px) {
+
+
+
+    .topnav {
+        flex-direction: column;
+    }
+
+    .topnav * {
+        font-size: 3vw;
+    }
+
+    .topnav a,
+    .topnav p,
+    .topnav button {
+        float: none;
+        text-align: center;
+    }
+
+    .topnav button {
+        font-size: 3vw;
+    }
+
+    .FoodSearch {
+        text-align: left;
+        float: left;
+        width: 100%;
+        height: 100%;
+        transition: none;
+        margin: 20px;
+        padding: 5px;
+        border: 2px solid rgb(87, 34, 15);
+        border-radius: 10px;
+    }
+
+    .TopnavTitle {
+        text-align: left;
+        float: left;
+        width: auto;
+        font-size: 4vw;
+        margin: 20px 20px;
+
+    }
+
+    .FoodSearch:hover,
+    .FoodSearch:focus {
+        width: 100%;
+    }
+
+    .ConboRow {
+        float: none;
+        width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .AccountContent {
+        margin: 20px;
+    }
+
+
+
+
+}
+
+@media screen and (max-width: 600px) {
+    .ConboRow {
+        flex-direction: column;
+    }
+
+    .FoodSearch {
+        float: none;
+    }
+}
+
+
+.Content {
+    display: flex;
+    flex-wrap: wrap;
+
+    line-height: 0;
+    padding: 2px 25%;
+    -webkit-column-count: 5;
+    -webkit-column-gap: 0px;
+    -moz-column-count: 5;
+    -moz-column-gap: 0px;
+    column-count: 5;
+    column-gap: 0px;
+}
+
+
+.Card {
+    position: relative;
+    z-index: 1;
+    margin: 40px;
+    padding-bottom: 20px;
+    border: 1px solid #ccc;
+    background-color: white;
+    float: left;
+    height: auto;
+    width: 28vw;
+    border-radius: 10px;
+    transition: width 0.1s, height 0.1s;
+}
+
+.Card img {
+    float: left;
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.Card:hover {
+    border: 1px solid #777;
+    width: 28.5vw;
+    overflow: hidden;
+}
+
+
+
+.Card p {
+    float: left;
+    font-size: 20px;
+    color: #00AD96;
+    padding: 3px;
+    text-align: center;
+    margin: 10px;
+}
+
+.CardRCG {
+    position: absolute;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.603);
+    border: 2px solid grey;
+    border-top: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.CardRCG p {
+    margin: 20px;
+    font-weight: bold;
+}
+
+.desc {
+    display: none;
+    font-size: 1.2em;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin: 10px;
+}
+
+.Card:hover .desc {
+    display: block;
+}
+
+.AccountContent {
+    height: auto;
+    margin: 1% 15%;
+    padding: 20px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+#AccountName {
+    font-weight: bold;
+    font-size: 1.5em;
+
+    margin: 20px;
+}
+
+#AccountMail {
+    font-weight: italic;
+    font-size: 1.3em;
+
+    margin: 20px;
+}
+
+.LoginDiv {
+    margin: 10%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 60px;
+    overflow-wrap: hidden;
+    box-sizing: border-box;
+}
+
+.LoginFields {
+    width: 100%;
+    color: rgb(87, 34, 15);
+    font-size: 1.2em;
+    color: rgb(51);
+    border: none;
+    border-bottom: 2px solid #614A41;
+    padding: 12px 10px;
+    margin: 20px 0;
+    display: inline-block;
+    box-sizing: border-box;
+    transition: border-bottom 1s;
+}
+
+.LoginFields:hover,
+.LoginFields:focus {
+    outline: none;
+    border-bottom: 3px solid rgb(78, 165, 28);
+}
+
+.LoginButton {
+    font-size: 1.2em;
+    width: 25%;
+    background-color: #4285F4;
+    color: #eee;
+    padding: 14px 20px;
+    margin: 20px 0px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.LoginButton:hover {
+    background-color: rgb(105, 158, 243);
+}
+
+.LoginLabel {
+    font-size: 1.1em;
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 20px 0px;
+    font-weight: 500;
+}
+
+.AccountContent input,
+.AccountContent button,
+.AccountContent textarea {
+    margin-left: 10px;
+}
+
+.LoginTitle {
+    font-size: 2em;
+    text-align: center;
+}
+
+.LoginLink {
+    font-size: 1em;
+    margin-left: 20px;
+}
+
+.FoodDetailName {
+    font-size: 1em;
+    margin-left: 20px;
+}
+
+.ContribTitle {
+    font-size: 2em;
+    text-align: center;
+}
+
+.CreateContent {
+
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.CreateElement {
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: none;
+}
+
+.SpanError {
+    color: #C73636;
+
+}
+
+.UploadMeal {}
+
+
+
+.AppendMealStep {
+    font-size: 0.9em;
+    width: 25%;
+    background-color: white;
+    padding: 5px 8px;
+    margin: 5px 0;
+    margin-bottom: 20px;
+    border: 1px solid #00AD96;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.AppendMealStep:hover {
+    border: 2px solid grey;
+}
+
+.RecipeStep {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    margin: 20px 0px;
+    padding: 10px;
+    background-color: transparent;
+    border: 1px solid rgb(201, 201, 201);
+    border-radius: 10px;
+}
+
+.RecipeStep p {
+    color: grey;
+    margin: 5px;
+    text-align: justify;
+}
+
+.MealStep {}
+
+.vl {
+    border-left: 2px solid #f2f2f2;
+    margin: 0px 10px;
+}
+
+.FoodPageName {
+    font-size: 2.5em;
+    text-align: center;
+
+}
+
+.RCGCounter {
+    display: inline-block;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    height: 36px;
+    width: 130px;
+    padding: 0px 10px;
+    justify-content: space-evenly;
+    align-items: center;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+.RCGCounter p {
+    font-size: 1.5em;
+    color: #dd7317;
+}
+
+.RCGCounter button {
+    height: 25px;
+    width: 25px;
+    flex-shrink: 0;
+    margin: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+}
+
+.RCGCounter button:hover {
+    background-color: #ccc;
+}
+
+.RCGCounter button span {
+    display: table-cell;
+    width: 50%;
+    height: 100%;
+    vertical-align: middle;
+    color: grey;
+    font-size: 2em;
+    margin: auto auto;
+}
+
+.RCGCounter button span:hover {
+    color: #FA672A;
+}
+
+
+.ImageFood {
+    margin: 10px;
+    max-width: 30vw;
+    object-fit: scale-down;
+    object-position: 0px 0px;
+    height: auto;
+    border-radius: 8px 8px;
+    margin: 30px 0px;
+}
+
+.FoodLabel {
+    font-size: 1.1em;
+}
+
+.FoodPage {}
+
+#Footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: white;
+    color: grey;
+    text-align: center;
+    border-top: 1px solid whitesmoke;
+    padding: 30px;
+    height: 50px;
+}
+
+#Footer p {
+    margin: 8px;
+}
+
+.Wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -50px;
+}
+
+#ReactFoodContainer {
+    display: inline;
 }

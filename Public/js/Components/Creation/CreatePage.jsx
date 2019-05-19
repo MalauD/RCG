@@ -1,6 +1,7 @@
 import React from 'react';
 import * as yup from 'yup';
 import Popup from 'reactjs-popup';
+import StepRecipeElement from '/home/pi/RCGWebsite/Public/js/Components/FoodPage/StepRecipeElement';
 
 class CreatePage extends React.Component {
 	constructor(props) {
@@ -10,6 +11,8 @@ class CreatePage extends React.Component {
 			MealRCG: '',
 			MealRecipe: '',
 			MealErrorForm: '',
+			MealRecipeSteps: [],
+			MealStepNumber: 1,
 			PopupOpen: ''
 		};
 		this.fileInput = React.createRef();
@@ -22,11 +25,18 @@ class CreatePage extends React.Component {
 				.integer('Meal RCG should be a number')
 				.min(0)
 				.max(20),
-			MealRecipe: yup
-				.string('Meal Recipe should be a string')
-				.required('Meal Recipe is required')
-				.min(10)
-				.max(2000)
+			MealRecipeSteps: yup
+				.array()
+				.of(
+					yup.object({
+						Recipe: yup
+							.string()
+							.min(10)
+							.max(500)
+							.required('Meal recipe is required')
+					})
+				)
+				.required()
 		});
 	}
 	render() {
@@ -36,6 +46,9 @@ class CreatePage extends React.Component {
 					<form onSubmit={this.OnSubmitClick}>
 						<p className="ContribTitle">Create a new meal</p>
 						<div className="CreateContent">
+							<p className="LoginLabel" style={{ marginTop: '4px' }}>
+								Meal Description
+							</p>
 							<input
 								type="text"
 								name="Name"
@@ -54,14 +67,37 @@ class CreatePage extends React.Component {
 								max="20"
 								onChange={this.OnChangeMealRCG}
 							/>
+							<p className="LoginLabel" style={{ marginTop: '8px' }}>
+								Enter recipe steps
+							</p>
 							<textarea
 								name="Recipe"
 								type="text"
-								style={{ height: '20rem' }}
+								style={{ height: '5rem' }}
 								className="CreateElement"
-								placeholder="Enter your recipe for this meal"
+								placeholder="Enter your recipe step for this meal"
 								onChange={this.OnChangeMealRecipe}
 							/>
+							<button type="button" className="AppendMealStep" onClick={this.OnAddStep}>
+								Add a step
+							</button>
+							<p className="LoginLabel" style={{ marginTop: '8px' }}>
+								Current recipe
+							</p>
+							<div>
+								{this.state.MealRecipeSteps.map(Step => {
+									return (
+										<StepRecipeElement
+											key={Step.Number}
+											StepNumber={Step.Number}
+											StepRecipe={Step.Recipe}
+										/>
+									);
+								})}
+							</div>
+							<p className="LoginLabel" style={{ marginTop: '8px' }}>
+								Upload an image
+							</p>
 							<input
 								type="file"
 								className="UploadMeal"
@@ -122,6 +158,23 @@ class CreatePage extends React.Component {
 		this.setState({ MealRecipe: e.target.value });
 	};
 
+	OnAddStep = () => {
+		if (this.state.MealRecipe) {
+			this.AppendMealStepToRecipe({ Number: this.state.MealStepNumber, Recipe: this.state.MealRecipe });
+			this.setState(prevState => ({
+				MealStepNumber: prevState.MealStepNumber + 1,
+				MealRecipe: ''
+			}));
+		}
+	};
+
+	AppendMealStepToRecipe = step => {
+		//Add step to state object using ES6 array modif (... and the value)
+		this.setState(prevState => ({
+			MealRecipeSteps: [...prevState.MealRecipeSteps, step]
+		}));
+	};
+
 	OnSubmitClick = e => {
 		e.preventDefault();
 		// validate form using yup
@@ -133,7 +186,7 @@ class CreatePage extends React.Component {
 					data.append('ImageFile', this.fileInput.current.files[0]);
 					data.append('Name', this.state.MealName);
 					data.append('RCG', this.state.MealRCG);
-					data.append('Recipe', this.state.MealRecipe);
+					data.append('Recipe', JSON.stringify(this.state.MealRecipeSteps));
 					//Send datas to the server
 					fetch('/Create', {
 						method: 'POST',
@@ -143,7 +196,6 @@ class CreatePage extends React.Component {
 						// Other wise display errors
 						if (result.ok) {
 							if (result.json().CreateStatus) {
-								//TODO Display UI for ok
 								this.openModal();
 							} else {
 								return;
