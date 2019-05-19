@@ -273,7 +273,7 @@ body {
     background-color: white;
     float: left;
     height: auto;
-    width: 28vw;
+    width: 490px;
     border-radius: 10px;
     transition: width 0.1s, height 0.1s;
 }
@@ -287,7 +287,7 @@ body {
 
 .Card:hover {
     border: 1px solid #777;
-    width: 28.5vw;
+    width: 500px;
     overflow: hidden;
 }
 
@@ -566,6 +566,7 @@ body {
 .FoodPage {}
 
 #Footer {
+    clear: both;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -574,7 +575,8 @@ body {
     text-align: center;
     border-top: 1px solid whitesmoke;
     padding: 30px;
-    height: 50px;
+    height: auto;
+    overflow: auto
 }
 
 #Footer p {
@@ -582,10 +584,10 @@ body {
 }
 
 .Wrapper {
-    min-height: 100%;
+    min-height: 85vh;
     height: auto !important;
-    height: 100%;
-    margin: 0 auto -50px;
+    height: 90%;
+    overflow: hidden;
 }
 
 #ReactFoodContainer {
