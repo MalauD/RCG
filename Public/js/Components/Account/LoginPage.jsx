@@ -1,7 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { SaveUser } from '../../Actions/Action';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
-class LoginPage extends React.Component {
+function mapDispatchToProps(dispatch) {
+	return {
+		SaveUser: User => dispatch(SaveUser(User))
+	};
+}
+
+class LoginPageConnected extends React.Component {
 	constructor(props) {
 		super(props);
 		//Set state for the current value of all the fields
@@ -63,22 +72,20 @@ class LoginPage extends React.Component {
 
 	OnSubmitLogin = () => {
 		//Make a post request using custom header to send it at JSON (see: https://stackoverflow.com/questions/29775797/fetch-post-json-data)
-		fetch('/Login', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
+		axios
+			.post('/Login', {
 				Mail: this.state.EmailField,
 				Password: this.state.PasswordField
 			})
-		}).then(result => {
-			//If there is no html error redirect to the homepage (user logged in)
-			// Other wise display errors
-			if (result.ok) this.props.history.push('/');
-			else result.json().then(err => this.DisplayError(err));
-		});
+			.then(result => {
+				//If there is no html error redirect to the homepage (user logged in)
+				// Other wise display errors
+				this.props.SaveUser(result.data.User);
+				this.props.history.push('/');
+			})
+			.catch(res => {
+				this.DisplayError(res.response.data);
+			});
 	};
 
 	OnEmailChanged = e => {
@@ -101,4 +108,10 @@ class LoginPage extends React.Component {
 		}
 	};
 }
+
+const LoginPage = connect(
+	null,
+	mapDispatchToProps
+)(LoginPageConnected);
+
 export default LoginPage;

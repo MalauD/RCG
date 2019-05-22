@@ -11,6 +11,8 @@ import ContribPage from './Components/Creation/ContribPage';
 import CreatePage from './Components/Creation/CreatePage';
 import TopNav from './Components/Search/TopNav';
 import AdminPage from './Components/Admin/AdminPage';
+import { Provider } from 'react-redux';
+import store from './store';
 
 class App extends React.Component {
 	constructor(props) {
@@ -20,24 +22,26 @@ class App extends React.Component {
 	render() {
 		// TODO Implement some of thes route
 		return (
-			<Router>
-				<div className="Wrapper">
-					<Route exact path="/" component={MainPage} />
-					<Route path="/" component={TopNav} />
-					<Route path="/Account" component={AccountPage} />
-					<Route path="/Login" component={LoginPage} />
-					<Route path="/Signup" component={RegisterPage} />
-					<Route path="/Search" component={SearchPage} />
-					<Route path="/Food/:idFoods/Food" component={FoodPage} />
-					<Route path="/Contrib" component={ContribPage} />
-					<Route path="/Create" component={CreatePage} />
-					<Route path="/Admin" component={AdminPage} />
-				</div>
-				<div id="Footer">
-					<p>&copy; 2019 - RCG Company</p>
-					<p>Made with &hearts; by Malaury</p>
-				</div>
-			</Router>
+			<Provider store={store}>
+				<Router>
+					<div className="Wrapper">
+						<Route exact path="/" component={MainPage} />
+						<Route path="/" component={TopNav} />
+						<Route path="/Account" component={AccountPage} />
+						<Route path="/Login" component={LoginPage} />
+						<Route path="/Signup" component={RegisterPage} />
+						<Route path="/Search" component={SearchPage} />
+						<Route path="/Food/:idFoods/Food" component={FoodPage} />
+						<Route path="/Contrib" component={ContribPage} />
+						<Route path="/Create" component={CreatePage} />
+						<Route path="/Admin" component={AdminPage} />
+					</div>
+					<div id="Footer">
+						<p>&copy; 2019 - RCG Company</p>
+						<p>Made with &hearts; by Malaury</p>
+					</div>
+				</Router>
+			</Provider>
 		);
 	}
 }

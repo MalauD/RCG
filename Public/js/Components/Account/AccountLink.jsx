@@ -1,20 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-class AccountLink extends React.Component {
+import { connect } from 'react-redux';
+import { LogoutUser, SaveUser } from '../../Actions/Action';
+
+const mapStateToProps = state => {
+	return { Name: state.AccountReducer.Name };
+};
+
+function mapDispatchToProps(dispatch) {
+	return {
+		LogoutUser: () => dispatch(LogoutUser()),
+		SaveUser: User => dispatch(SaveUser(User))
+	};
+}
+
+class AccountLinkConnected extends React.Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			APIName: 'Account'
-		};
 	}
 
 	render = () => {
 		return (
 			<div className="dropdown">
 				<Link to="/Account">
-					<button className="dropbtn">{this.state.APIName}</button>
+					<button className="dropbtn">{this.props.Name ? this.props.Name : 'Account'}</button>
 				</Link>
 				<div className="dropdown-content">
 					<Link
@@ -52,20 +63,21 @@ class AccountLink extends React.Component {
 
 	Logout = () => {
 		fetch('/Logout').then(() => {
-			this.GetName();
+			this.props.LogoutUser();
 		});
 	};
 
-	GetName() {
-		fetch('/Account/User/Name')
-			.then(res => res.json())
-			.then(
-				result => {
-					this.setState({ APIName: result.Name });
-				},
-				error => {}
-			);
+	GetName(callback) {
+		//On launch request account detail and store in redux
+		axios.get('/Account/User').then(res => {
+			this.props.SaveUser(res.data);
+		});
 	}
 }
+
+const AccountLink = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(AccountLinkConnected);
 
 export default AccountLink;

@@ -1,8 +1,16 @@
 import React from 'react';
 import AccountLink from '/home/pi/RCGWebsite/Public/js/Components/Account/AccountLink';
 import { withRouter, Link } from 'react-router-dom';
+import LoginLink from '../Account/LoginLink';
+import { connect } from 'react-redux';
 
-class TopNav extends React.Component {
+const mapStateToProps = state => {
+	return {
+		IsLogged: state.AccountReducer.IsLogged
+	};
+};
+
+class TopNavConnected extends React.Component {
 	constructor(props) {
 		super(props);
 		//State for the current value on the search bar
@@ -35,7 +43,7 @@ class TopNav extends React.Component {
 						Contributions
 					</p>
 				</Link>
-				<AccountLink />
+				{this.props.IsLogged ? <AccountLink /> : <LoginLink />}
 			</div>
 		);
 	};
@@ -58,5 +66,7 @@ class TopNav extends React.Component {
 		this.props.history.push('/');
 	};
 }
+
+const TopNav = connect(mapStateToProps)(TopNavConnected);
 
 export default withRouter(TopNav);

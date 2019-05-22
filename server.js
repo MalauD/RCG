@@ -169,7 +169,13 @@ app.post('/Signup', (req, res) => {
 			req.session.hash = User.Hash;
 			console.log('[Session] User save in Session');
 			//send a Created (201) to the client
-			res.sendStatus(201);
+			res.json({
+				User: {
+					Name: req.session.name,
+					Rank: 0,
+					Mail: req.session.mail
+				}
+			});
 		});
 	}
 });
@@ -189,7 +195,13 @@ app.post('/Login', (req, res) => {
 			req.session.Rank = User.Rank;
 			console.log('[Session] User save in Session');
 			//send a Created (201) to the client
-			res.sendStatus(201);
+			res.json({
+				User: {
+					Name: req.session.name,
+					Rank: req.session.Rank,
+					Mail: req.session.mail
+				}
+			});
 		});
 	}
 });
