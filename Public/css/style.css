@@ -54,6 +54,8 @@ body {
 .topnavLink:hover {
     color: black;
     border: none;
+
+
     border-bottom: 2px solid #6BCE6B;
 }
 
@@ -157,8 +159,8 @@ body {
 
 .ConboRow img {
     margin: 10px;
+    height: 50px;
     width: auto;
-    height: 3.1vw;
 }
 
 .AccountContent input[type=text],
@@ -218,79 +220,7 @@ body {
 }
 
 
-@media screen and (max-width: 1000px) {
 
-
-
-    .topnav {
-        flex-direction: column;
-    }
-
-    .topnav * {
-        font-size: 3vw;
-    }
-
-    .topnav a,
-    .topnav p,
-    .topnav button {
-        float: none;
-        text-align: center;
-    }
-
-    .topnav button {
-        font-size: 3vw;
-    }
-
-    .FoodSearch {
-        text-align: left;
-        float: left;
-        width: 100%;
-        height: 100%;
-        transition: none;
-        margin: 20px;
-        padding: 5px;
-    }
-
-    .TopnavTitle {
-        text-align: left;
-        float: left;
-        width: auto;
-        font-size: 4vw;
-        margin: 20px 20px;
-
-    }
-
-    .FoodSearch:hover,
-    .FoodSearch:focus {
-        width: 100%;
-    }
-
-    .ConboRow {
-        float: none;
-        width: 100%;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-    }
-
-    .AccountContent {
-        margin: 20px;
-    }
-
-
-
-
-}
-
-@media screen and (max-width: 600px) {
-    .ConboRow {
-        flex-direction: column;
-    }
-
-    .FoodSearch {
-        float: none;
-    }
-}
 
 
 .Content {
@@ -309,15 +239,16 @@ body {
 
 
 .Card {
+    display: inline-grid;
     position: relative;
     z-index: 1;
-    margin: 40px;
+    margin: 20px;
     padding-bottom: 20px;
     border: 1px solid #ccc;
     background-color: white;
     float: left;
     height: auto;
-    width: 490px;
+    width: 45%;
     border-radius: 10px;
     transition: width 0.1s, height 0.1s;
 }
@@ -331,19 +262,17 @@ body {
 
 .Card:hover {
     border: 1px solid #777;
-    width: 500px;
     overflow: hidden;
 }
 
 
 
 .Card p {
-    float: left;
     font-size: 20px;
     color: #00AD96;
     padding: 3px;
     text-align: center;
-    margin: 10px;
+    margin: 20px 10px;
 }
 
 .CardRCG {
@@ -375,10 +304,13 @@ body {
 }
 
 .AccountContent {
+    display: inline-block;
     height: auto;
     margin: 1% 15%;
     padding: 20px;
-
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
     border-radius: 10px;
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.1);
@@ -387,7 +319,6 @@ body {
 #AccountName {
     font-weight: bold;
     font-size: 1.5em;
-
     margin: 20px;
 }
 
@@ -636,4 +567,145 @@ body {
 
 #ReactFoodContainer {
     display: inline;
+}
+
+.AdminTools {
+    display: inline;
+    height: auto;
+    overflow: auto
+}
+
+.AdminTools button {
+    float: right;
+    margin: 20px;
+    padding: 8px;
+    border: 1px solid grey;
+    border-radius: 8px;
+}
+
+.AdminTools button:hover {
+    color: black;
+    border: 1px solid black;
+}
+
+.FoodListSelector {}
+
+.FoodListSec {
+    color: grey;
+    margin: 5px 10px;
+}
+
+.FoodListSelector input {
+    margin: 0px 0px;
+    font-size: 16px;
+    color: grey;
+    width: 12%;
+    flex: 1;
+    border: 1px solid rgb(237, 239, 241);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: transparent;
+    padding: 8px 10px;
+}
+
+.FoodListItemContainer {
+    width: 12%;
+    border: 1px solid grey;
+    border-top: none;
+    padding: 8px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.FoodListItem {
+    margin: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+
+
+
+    .topnav {
+        flex-direction: column;
+    }
+
+    .topnav * {
+        font-size: 3vw;
+    }
+
+    .topnav a,
+    .topnav p,
+    .topnav button {
+        float: none;
+        text-align: center;
+    }
+
+    .topnav button {
+        font-size: 3vw;
+        padding: 20px;
+    }
+
+    .FoodSearch {
+        text-align: left;
+        float: left;
+        width: 100%;
+        height: 100%;
+        transition: none;
+        margin: 20px;
+        padding: 5px;
+    }
+
+    .TopnavTitle {
+        text-align: left;
+        float: left;
+        width: auto;
+        font-size: 4vw;
+        margin: 20px 20px;
+
+    }
+
+    .FoodSearch:hover,
+    .FoodSearch:focus {
+        width: 100%;
+    }
+
+    .ConboRow {
+        float: none;
+        width: 100%;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .AccountContent {
+        margin: 20px;
+    }
+
+    .Card {
+        width: 100%
+    }
+
+    .Card p {
+        font-size: 32px;
+    }
+
+    .ImageFood {
+        max-width: unset;
+        width: 100%;
+        object-fit: unset;
+    }
+
+    .FoodLabel {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .ConboRow {
+        flex-direction: column;
+    }
+
+    .FoodSearch {
+        float: none;
+    }
 }

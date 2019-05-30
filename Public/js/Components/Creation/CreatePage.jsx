@@ -1,7 +1,8 @@
 import React from 'react';
 import * as yup from 'yup';
-import Popup from 'reactjs-popup';
-import StepRecipeElement from '/home/pi/RCGWebsite/Public/js/Components/FoodPage/StepRecipeElement';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import MealStepCreator from './MealStepCreator';
+import FoodListSelector from './FoodListSelector';
 
 class CreatePage extends React.Component {
 	constructor(props) {
@@ -9,11 +10,9 @@ class CreatePage extends React.Component {
 		this.state = {
 			MealName: '',
 			MealRCG: '',
-			MealRecipe: '',
 			MealErrorForm: '',
-			MealRecipeSteps: [],
-			MealStepNumber: 1,
-			PopupOpen: ''
+			PopupOpen: '',
+			MealRecipeSteps: []
 		};
 		this.fileInput = React.createRef();
 		this.FormValidationShem = yup.object().shape({
@@ -36,7 +35,7 @@ class CreatePage extends React.Component {
 							.required('Meal recipe is required')
 					})
 				)
-				.required()
+				.required('Recipe is required')
 		});
 	}
 	render() {
@@ -67,34 +66,13 @@ class CreatePage extends React.Component {
 								max="20"
 								onChange={this.OnChangeMealRCG}
 							/>
-							<p className="LoginLabel" style={{ marginTop: '8px' }}>
-								Enter recipe steps
-							</p>
-							<textarea
-								name="Recipe"
-								type="text"
-								style={{ height: '5rem' }}
-								className="CreateElement"
-								placeholder="Enter your recipe step for this meal"
-								onChange={this.OnChangeMealRecipe}
+							<MealStepCreator
+								OnElementAdded={elementsarray => this.setState({ MealRecipeSteps: elementsarray })}
 							/>
-							<button type="button" className="AppendMealStep" onClick={this.OnAddStep}>
-								Add a step
-							</button>
 							<p className="LoginLabel" style={{ marginTop: '8px' }}>
-								Current recipe
+								Select ingredients
 							</p>
-							<div>
-								{this.state.MealRecipeSteps.map(Step => {
-									return (
-										<StepRecipeElement
-											key={Step.Number}
-											StepNumber={Step.Number}
-											StepRecipe={Step.Recipe}
-										/>
-									);
-								})}
-							</div>
+							<FoodListSelector />
 							<p className="LoginLabel" style={{ marginTop: '8px' }}>
 								Upload an image
 							</p>
@@ -115,37 +93,10 @@ class CreatePage extends React.Component {
 						</div>
 					</form>
 				</div>
-				<Popup
-					className="AccountContent"
-					open={this.state.PopupOpen}
-					closeOnDocumentClick
-					onClose={this.closeModal}
-				>
-					<div>
-						<p className="ContribTitle">Thank you for the contribution</p>
-						<p style={{ textAlign: 'center' }}>It will be one the website very soon</p>
-						<button
-							className="LoginButton"
-							onClick={() => {
-								this.props.history.push('/');
-							}}
-						>
-							Close
-						</button>
-					</div>
-				</Popup>
 			</div>
 		);
 	}
-
-	closeModal = () => {
-		this.setState({ PopupOpen: false });
-	};
-
-	openModal = () => {
-		this.setState({ PopupOpen: true });
-	};
-
+	//TODO PB with submition (event missing) => check git repo
 	OnChangeMealName = e => {
 		this.setState({ MealName: e.target.value });
 	};
@@ -154,30 +105,14 @@ class CreatePage extends React.Component {
 		this.setState({ MealRCG: e.target.value });
 	};
 
-	OnChangeMealRecipe = e => {
-		this.setState({ MealRecipe: e.target.value });
-	};
-
-	OnAddStep = () => {
-		if (this.state.MealRecipe) {
-			this.AppendMealStepToRecipe({ Number: this.state.MealStepNumber, Recipe: this.state.MealRecipe });
-			this.setState(prevState => ({
-				MealStepNumber: prevState.MealStepNumber + 1,
-				MealRecipe: ''
-			}));
-		}
-	};
-
-	AppendMealStepToRecipe = step => {
-		//Add step to state object using ES6 array modif (... and the value)
-		this.setState(prevState => ({
-			MealRecipeSteps: [...prevState.MealRecipeSteps, step]
-		}));
-	};
-
 	OnSubmitClick = e => {
 		e.preventDefault();
 		// validate form using yup
+		this.SubmitForm();
+	};
+	//TODO Handle empty fields
+
+	SubmitForm() {
 		this.FormValidationShem.validate(this.state)
 			.then(() => {
 				if (this.fileInput.current.files[0]) {
@@ -196,7 +131,6 @@ class CreatePage extends React.Component {
 						// Other wise display errors
 						if (result.ok) {
 							if (result.json().CreateStatus) {
-								this.openModal();
 							} else {
 								return;
 							}
@@ -207,10 +141,7 @@ class CreatePage extends React.Component {
 			.catch(err => {
 				this.setState({ MealErrorForm: err.errors[0] });
 			});
-	};
-	//TODO Handle empty fields
-
-	ValidateForm = () => {};
+	}
 }
 
 export default CreatePage;

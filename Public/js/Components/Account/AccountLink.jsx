@@ -1,18 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 import { connect } from 'react-redux';
-import { LogoutUser, SaveUser } from '../../Actions/Action';
+import { LogoutUser } from '../../Actions/Action';
 
 const mapStateToProps = state => {
-	return { Name: state.AccountReducer.Name };
+	return { Name: state.AccountReducer.Name, Rank: state.AccountReducer.Rank };
 };
 
 function mapDispatchToProps(dispatch) {
 	return {
-		LogoutUser: () => dispatch(LogoutUser()),
-		SaveUser: User => dispatch(SaveUser(User))
+		LogoutUser: () => dispatch(LogoutUser())
 	};
 }
 
@@ -36,14 +34,21 @@ class AccountLinkConnected extends React.Component {
 					>
 						Create
 					</Link>
-					<Link
-						className="topnavLink"
-						id="AccountLink"
-						to="/Admin"
-						style={{ float: 'right', width: '100% ' }}
-					>
-						Admin
+					<Link to="/Contrib">
+						<p className="topnavLink " id="AccountLink" style={{ float: 'right', width: '100% ' }}>
+							Contributions
+						</p>
 					</Link>
+					{this.props.Rank > 100 && (
+						<Link
+							className="topnavLink"
+							id="AccountLink"
+							to="/Admin"
+							style={{ float: 'right', width: '100% ' }}
+						>
+							Admin
+						</Link>
+					)}
 					<p
 						className="topnavLink"
 						id="AccountLink"
@@ -57,22 +62,11 @@ class AccountLinkConnected extends React.Component {
 		);
 	};
 
-	componentDidMount = () => {
-		this.GetName();
-	};
-
 	Logout = () => {
 		fetch('/Logout').then(() => {
 			this.props.LogoutUser();
 		});
 	};
-
-	GetName(callback) {
-		//On launch request account detail and store in redux
-		axios.get('/Account/User').then(res => {
-			this.props.SaveUser(res.data);
-		});
-	}
 }
 
 const AccountLink = connect(

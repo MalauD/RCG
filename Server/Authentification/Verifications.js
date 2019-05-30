@@ -51,7 +51,7 @@ module.exports = {
 			callback('Password', 'is empty');
 			return;
 		}
-		//Check password length
+		//Check password  length
 		if (new String(Cred.Password).length < 8) {
 			callback('Password', 'has a length < 8');
 			return;
@@ -61,7 +61,11 @@ module.exports = {
 	},
 
 	CreateFormShem: yup.object().shape({
-		Name: yup.string().required(),
+		Name: yup
+			.string()
+			.required()
+			.min(3)
+			.max('100'),
 		RCG: yup
 			.number()
 			.required()
@@ -81,7 +85,11 @@ module.exports = {
 				})
 			)
 			.required()
-	})
+	}),
+
+	emailIsValid: function(email) {
+		return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+	}
 };
 
 function emailIsValid(email) {

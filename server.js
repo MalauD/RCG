@@ -38,7 +38,7 @@ var upload = multer({
 const sqlquery = require('./Server/mysql_query.js');
 const DBUsers = require('./Server/Authentification/mysql_query_users.js');
 const VerifCredentials = require('./Server/Authentification/Verifications.js');
-
+const FoodList = require('./Server/mysql_query_foodslist');
 const Authentification = require('./Server/Authentification/Authentification.js');
 
 var key = fs.readFileSync('Encryption/key.pem');
@@ -66,6 +66,38 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(__dirname + '/Public'));
+
+app.get('/foodslist/id/:id', (req, res) => {
+	if (req.params.id) {
+		FoodList.GetFoodItemById(req.params.id, Queries.connection, (err, resp) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				res.end();
+				return;
+			}
+			res.json(resp);
+		});
+		return;
+	}
+	res.sendStatus(500);
+});
+
+app.get('/foodslist/name/:name', (req, res) => {
+	if (req.params.name) {
+		FoodList.GetFoodItemByName(req.params.name, 5, Queries.connection, (err, resp) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				res.end();
+				return;
+			}
+			res.json(resp);
+		});
+		return;
+	}
+	res.sendStatus(500);
+});
 
 app.get('/foods/name/:id', (req, res) => {
 	Queries.RequestFoodsByName(req.params.id, (err, result) => {
@@ -137,6 +169,95 @@ app.post('/foods/vote/', (req, res) => {
 	}
 });
 
+app.post('/foods/admin/delete/:id', (req, res) => {
+	//verify if id isnt empty
+	if (req.params.id != 'undefined') {
+		//verif if user is allowed to perform this action
+		if (req.session.name && req.session.Rank > 100) {
+			Queries.RemoveFoodFromPending(req.params.id, error => {
+				if (error) {
+					console.log(error);
+					res.sendStatus(500);
+					return;
+				}
+
+				console.log('[Foods] Food remove from pending');
+				res.sendStatus(200);
+			});
+			return;
+		}
+	}
+	res.sendStatus(500);
+});
+
+app.post('/foods/admin/move/:id', (req, res) => {
+	//verify if id isnt empty
+	if (req.params.id != 'undefined') {
+		//verif if user is allowed to perform this action
+		if (req.session.name && req.session.Rank > 100) {
+			//See if the food is checked or not
+			if (req.query.Checked == 'false') {
+				Queries.MoveFoodToNormalDB(req.params.id, err => {
+					if (err) {
+						console.log(err);
+						res.sendStatus(500);
+						return;
+					}
+					Queries.RemoveFoodFromPending(req.params.id, error => {
+						if (error) {
+							console.log(error);
+							res.sendStatus(500);
+							return;
+						}
+
+						Queries.GetLatestInsertedID((errr, resp) => {
+							if (errr) {
+								console.log(errr);
+								return;
+							}
+							console.log('[Foods] Foods has been moved ! Pending --> Normal');
+							res.json({ NewID: resp });
+							return;
+						});
+						return;
+					});
+					return;
+				});
+				return;
+			} else if (req.query.Checked == 'true') {
+				Queries.MoveFoodToPendingDB(req.params.id, err => {
+					if (err) {
+						console.log(err);
+						res.sendStatus(500);
+						return;
+					}
+					Queries.RemoveFoodFromNormal(req.params.id, error => {
+						if (error) {
+							console.log(error);
+							res.sendStatus(500);
+							return;
+						}
+
+						Queries.GetLatestInsertedID((errr, resp) => {
+							if (errr) {
+								console.log(errr);
+								return;
+							}
+							console.log('[Foods] Foods has been moved ! Pending --> Normal');
+							res.json({ NewID: resp });
+							return;
+						});
+						return;
+					});
+					return;
+				});
+				return;
+			}
+		}
+	}
+	res.sendStatus(500);
+});
+
 app.get('/foods/unchecked', (req, res) => {
 	if (req.session.name && req.session.Rank > 100)
 		Queries.QueryDBForFoodUnchecked((Failed, result) => {
@@ -145,6 +266,17 @@ app.get('/foods/unchecked', (req, res) => {
 				res.end();
 			} else res.json(result);
 		});
+});
+
+app.get('/foods/contrib', (req, res) => {
+	if (req.session.name && req.session.hash) {
+		Queries.QueryDBForContrib(req.session.hash, (Failed, result) => {
+			if (Failed) {
+				res.sendStatus(500);
+				res.end();
+			} else res.json(result);
+		});
+	}
 });
 
 app.get('/Account/User/Name', (req, res) => {

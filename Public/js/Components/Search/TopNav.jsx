@@ -3,12 +3,20 @@ import AccountLink from '/home/pi/RCGWebsite/Public/js/Components/Account/Accoun
 import { withRouter, Link } from 'react-router-dom';
 import LoginLink from '../Account/LoginLink';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import { SaveUser } from '../../Actions/Action';
 
 const mapStateToProps = state => {
 	return {
 		IsLogged: state.AccountReducer.IsLogged
 	};
 };
+
+function mapDispatchToProps(dispatch) {
+	return {
+		SaveUser: User => dispatch(SaveUser(User))
+	};
+}
 
 class TopNavConnected extends React.Component {
 	constructor(props) {
@@ -25,7 +33,7 @@ class TopNavConnected extends React.Component {
 			<div className="topnav">
 				{/* <img src="/Logo.png" alt="logo" onClick={this.OnLogoClick} /> */}
 				<div className="ConboRow">
-					<img src="RCG.png" onClick={this.OnLogoClick} />
+					<img src="logoHugo.png" onClick={this.OnLogoClick} />
 					<input
 						type="text"
 						id="search"
@@ -38,12 +46,18 @@ class TopNavConnected extends React.Component {
 						onChange={this.HandleSearchChange}
 					/>
 				</div>
-				<Link to="/Contrib">
-					<p className="topnavLink " style={{ float: 'right' }}>
-						Contributions
-					</p>
-				</Link>
-				{this.props.IsLogged ? <AccountLink /> : <LoginLink />}
+				{this.props.IsLogged == false ? (
+					<React.Fragment>
+						<Link to="/Contrib">
+							<p className="topnavLink " style={{ float: 'right' }}>
+								Contributions
+							</p>
+						</Link>
+						<AccountLink />
+					</React.Fragment>
+				) : (
+					<LoginLink />
+				)}
 			</div>
 		);
 	};
@@ -65,8 +79,25 @@ class TopNavConnected extends React.Component {
 		console.log('Clicked');
 		this.props.history.push('/');
 	};
+
+	componentDidMount = () => {
+		this.GetName();
+	};
+
+	GetName(callback) {
+		//On launch request account detail and store in redux
+		axios
+			.get('/Account/User')
+			.then(res => {
+				this.props.SaveUser(res.data);
+			})
+			.catch(err => {});
+	}
 }
 
-const TopNav = connect(mapStateToProps)(TopNavConnected);
+const TopNav = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(TopNavConnected);
 
 export default withRouter(TopNav);

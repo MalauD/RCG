@@ -1,19 +1,23 @@
 import React from 'react';
 import FoodElement from './FoodElement';
+import { connect } from 'react-redux';
 
-class FoodContainer extends React.Component {
+const mapStateToProps = state => {
+	return {
+		FoodsResult: state.FoodSearchReducer.FoodsResult,
+		IsFetching: state.FoodSearchReducer.IsFetching,
+		IsCheckedFood: state.FoodSearchReducer.IsCheckedFood,
+		SearchType: state.FoodSearchReducer.SearchType
+	};
+};
+
+class FoodContainerConnected extends React.Component {
 	constructor(props) {
 		super(props);
-		//State for the api result, that the parent give on API response.
-		this.state = {
-			ApiResult: 'undefined',
-			IsCheckedFood: true,
-			IsLoading: false
-		};
 	}
 
 	render = () => {
-		if (this.state.IsLoading) {
+		if (this.props.IsFetching) {
 			return (
 				<div className="Spinner">
 					<object type="image/svg+xml" data="spinner.svg">
@@ -21,19 +25,18 @@ class FoodContainer extends React.Component {
 					</object>
 				</div>
 			);
-		}
-		if (this.state.ApiResult != 'undefined') {
+		} else if (this.props.FoodsResult && this.props.SearchType == this.props.SearchTypeParent) {
 			//itterate over food items in the api response
 			// Add FoodElement componenent with proper props
 
-			let foodItems = this.state.ApiResult.map(fooditem => {
+			let foodItems = this.props.FoodsResult.map(fooditem => {
 				return (
 					<FoodElement
 						Name={fooditem.Name}
 						ImageLink={fooditem.ImageLink}
 						key={fooditem.idFoods}
 						idFoods={fooditem.idFoods}
-						IsChecked={this.state.IsCheckedFood}
+						IsChecked={this.props.IsCheckedFood}
 						RCG={fooditem.RCG}
 					/>
 				);
@@ -45,34 +48,8 @@ class FoodContainer extends React.Component {
 			return <div />;
 		}
 	};
-
-	ShowResult = (res, IsChecked = true) => {
-		//This function is called by the parent with param the api response
-		//This line will refresh the state variable for the Api result.
-		this.setState({ ApiResult: res, IsCheckedFood: IsChecked, IsLoading: false });
-	};
-
-	ShowSpinner = () => {
-		this.setState({ IsLoading: true });
-	};
-
-	MakeSearch = Search => {
-		//Show the Spinner
-		this.ShowSpinner();
-		// Call the api to retreive food
-		fetch('/foods/name/' + Search)
-			.then(res => res.json())
-			.then(
-				result => {
-					//Call the food container method to show API result
-					this.ShowResult(result);
-				},
-				err => {
-					this.setState({ IsLoading: false });
-					console.log(err);
-				}
-			);
-	};
 }
+
+const FoodContainer = connect(mapStateToProps)(FoodContainerConnected);
 
 export default FoodContainer;

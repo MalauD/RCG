@@ -4,18 +4,36 @@ import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import StepRecipeElement from './StepRecipeElement';
 import RCGCounter from './RCGCounter';
+import AdminTools from '../Admin/AdminTools';
 
-class FoodPage extends React.Component {
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+	return { Rank: state.AccountReducer.Rank };
+};
+
+class FoodPageConnected extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			ApiResult: ''
+			ApiResult: '',
+			IsCheckedFood: ''
 		};
 	}
 
 	componentDidMount() {
 		//Get query params for checked
+		this.ApiFetch();
+	}
+
+	componentWillReceiveProps() {
+		//On props change fetch (when the query string change)
+		this.ApiFetch();
+	}
+
+	ApiFetch() {
 		const values = queryString.parse(this.props.location.search);
+		this.setState({ IsCheckedFood: values.Checked });
 		//Get api res for food with specified id and checked.
 		axios
 			.get('/foods/id/' + this.props.match.params.idFoods + '?Checked=' + values.Checked)
@@ -46,7 +64,6 @@ class FoodPage extends React.Component {
 							</div>
 
 							<img src={this.state.ApiResult.ImageLink} className="ImageFood" />
-							<br />
 							<p className="FoodLabel" style={{ marginTop: '8px', fontSize: '1.5em' }}>
 								Recipe
 							</p>
@@ -61,6 +78,12 @@ class FoodPage extends React.Component {
 									);
 								})}
 							</div>
+							{this.props.Rank > 100 && (
+								<AdminTools
+									IsChecked={this.state.IsCheckedFood}
+									idFoods={this.props.match.params.idFoods}
+								/>
+							)}
 						</div>
 					)}
 				</div>
@@ -68,5 +91,7 @@ class FoodPage extends React.Component {
 		);
 	}
 }
+
+const FoodPage = connect(mapStateToProps)(FoodPageConnected);
 
 export default FoodPage;
