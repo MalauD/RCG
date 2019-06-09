@@ -84,6 +84,33 @@ module.exports = {
 						.required('Meal recipe is required')
 				})
 			)
+			.required(),
+		PrepTime: yup
+			.number()
+			.required()
+			.positive()
+			.integer()
+			.min(0),
+		People: yup
+			.number()
+			.required()
+			.positive()
+			.integer()
+			.min(0),
+		Ingredients: yup
+			.array()
+			.of(
+				yup.object({
+					id: yup
+						.number()
+						.integer()
+						.positive()
+						.required(),
+					name: yup.string().required(),
+					sciname: yup.string().nullable(),
+					qty: yup.string().required()
+				})
+			)
 			.required()
 	}),
 

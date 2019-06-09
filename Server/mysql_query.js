@@ -60,7 +60,8 @@ class MySqlQuery {
 	}
 
 	QueryDBForFood(foodname, callback) {
-		const Query = 'SELECT * FROM foods WHERE MATCH(Name,Content) AGAINST(? IN BOOLEAN MODE)';
+		const Query =
+			'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods WHERE MATCH(Name,Content) AGAINST(? IN BOOLEAN MODE)';
 		console.log('[MySql - Food] Requesting DB for food');
 		this.connection.query(Query, [foodname], (err, rows, field) => {
 			if (err) {
@@ -102,6 +103,12 @@ class MySqlQuery {
 				console.log('[MySql - Food] No recipe found for this id');
 			}
 
+			if (rows[0].Ingredients) {
+				rows[0].Ingredients = JSON.parse(rows[0].Ingredients);
+			} else {
+				console.log('[MySql - Food] No ingredients list found for this id');
+			}
+
 			console.log('[MySql - Food] Found food for requested id');
 
 			callback(false, rows[0]);
@@ -123,7 +130,17 @@ class MySqlQuery {
 			let resp = [];
 			for (var k in rows) {
 				//console.log(rows[k].Content);
-				rows[k].Content = JSON.parse(rows[k].Content);
+				if (rows[k].Content) {
+					rows[k].Content = JSON.parse(rows[k].Content);
+				} else {
+					console.log('[MySql - Food] No recipe found for this id');
+				}
+
+				if (rows[k].Ingredients) {
+					rows[k].Ingredients = JSON.parse(rows[k].Ingredients);
+				} else {
+					console.log('[MySql - Food] No ingredients list found for this id');
+				}
 				resp.push(rows[k]);
 			}
 
@@ -148,7 +165,17 @@ class MySqlQuery {
 			let resp = [];
 			for (var k in rows) {
 				//console.log(rows[k].Content);
-				rows[k].Content = JSON.parse(rows[k].Content);
+				if (rows[k].Content) {
+					rows[k].Content = JSON.parse(rows[k].Content);
+				} else {
+					console.log('[MySql - Food] No recipe found for this id');
+				}
+
+				if (rows[k].Ingredients) {
+					rows[k].Ingredients = JSON.parse(rows[k].Ingredients);
+				} else {
+					console.log('[MySql - Food] No ingredients list found for this id');
+				}
 				resp.push(rows[k]);
 			}
 
@@ -160,7 +187,7 @@ class MySqlQuery {
 
 	MoveFoodToNormalDB(idFoods, callback) {
 		const Query =
-			'INSERT INTO foods (Name, Content, ImageLink, RCG, userhash) SELECT Name, Content, ImageLink, RCG, userhash FROM foodsnew WHERE idFoods = ?';
+			'INSERT INTO foods (Name, Content, ImageLink, RCG, userhash, PrepTime, People, Ingredients, CreatedAt) SELECT Name, Content, ImageLink, RCG, userhash, PrepTime, People, Ingredients, CreatedAt FROM foodsnew WHERE idFoods = ?';
 		console.log('[MySql - Food] Moving food from pending to normal');
 
 		this.connection.query(Query, [idFoods], (err, rows) => {
@@ -170,13 +197,13 @@ class MySqlQuery {
 				return;
 			}
 			console.log('[MySql - Food] Completed');
-			callback();
+			callback(null, rows.insertId);
 		});
 	}
 
 	MoveFoodToPendingDB(idFoods, callback) {
 		const Query =
-			'INSERT INTO foodsnew (Name, Content, ImageLink, RCG, userhash) SELECT Name, Content, ImageLink, RCG, userhash FROM foods WHERE idFoods = ?';
+			'INSERT INTO foodsnew (Name, Content, ImageLink, RCG, userhash, PrepTime, People, Ingredients, CreatedAt) SELECT Name, Content, ImageLink, RCG, userhash, PrepTime, People, Ingredients, CreatedAt FROM foods WHERE idFoods = ?';
 		console.log('[MySql - Food] Moving food from normal to pending');
 
 		this.connection.query(Query, [idFoods], (err, rows) => {
@@ -186,7 +213,7 @@ class MySqlQuery {
 				return;
 			}
 			console.log('[MySql - Food] Completed');
-			callback();
+			callback(null, rows.insertId);
 		});
 	}
 
@@ -227,7 +254,11 @@ class MySqlQuery {
 			RCG: food.RCG,
 			Content: JSON.stringify(food.Recipe),
 			ImageLink: foodImage,
-			userhash: userhash
+			userhash: userhash,
+			PrepTime: food.PrepTime,
+			People: food.People,
+			Ingredients: JSON.stringify(food.Ingredients),
+			CreatedAt: Date.now()
 		};
 
 		const Query = 'INSERT INTO foodsnew SET ?';
@@ -256,6 +287,24 @@ class MySqlQuery {
 			console.log('[MySql - Food] Found last id ' + resp['LAST_INSERT_ID()']);
 
 			callback(null, resp['LAST_INSERT_ID()']);
+		});
+	}
+
+	GetBestRCGMeal(limit, callback) {
+		//Get the best rcg food;
+		const Query =
+			'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods ORDER BY RCG DESC LIMIT ?';
+		console.log('[MySql - Food] getting the best rcg food');
+		this.connection.query(Query, [limit], (err, rows, field) => {
+			if (err) {
+				console.log('[MySql - Food] Error !');
+				callback(err);
+				return;
+			}
+
+			console.log('[MySql - Food] Found ' + rows.length + ' results');
+
+			callback(false, rows);
 		});
 	}
 }

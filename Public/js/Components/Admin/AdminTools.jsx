@@ -31,12 +31,15 @@ class AdminTools extends React.Component {
 		axios
 			.post('/foods/admin/move/' + this.props.idFoods + '?Checked=' + this.props.IsChecked)
 			.then(res => {
-				// ! Not safe
-				// var NewChecked = this.props.IsChecked === 'true' ? 'false' : 'true';
-
-				// this.props.history.push('/Food/' + res.data.NewID + '/Food?Checked=' + NewChecked);
+				// ! In test
+				console.log(this.props.IsChecked);
+				console.log(this.props.IsChecked == 'true');
+				let url;
+				if (this.props.IsChecked == 'true') url = '/Food/' + res.data.NewID + '/Food?Checked=false';
+				else url = '/Food/' + res.data.NewID + '/Food?Checked=true';
+				console.log(url);
+				this.props.history.push(url);
 				//TODO add notif
-				this.props.history.push('/');
 			})
 			.catch(res => {
 				this.setState({ MoveStyle: { borderColor: 'red' } });

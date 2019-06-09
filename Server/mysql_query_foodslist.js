@@ -33,5 +33,37 @@ module.exports = {
 
 			callback(false, rows);
 		});
+	},
+
+	GetFoodsItemByGroup: (GroupName, Connection, callback) => {
+		const Query = 'SELECT * FROM FoodsList WHERE FGROUP = ?';
+		console.log('[Mysql - Foodlist] Retreiving foodlist by group name');
+		Connection.query(Query, [GroupName], (err, rows, field) => {
+			if (err) {
+				console.log(err);
+				callback(err);
+				return;
+			}
+
+			console.log('[Mysql - Foodlist] Found ' + rows.length + ' results');
+
+			callback(false, rows);
+		});
+	},
+
+	GetFoodsItemBySubGroup: (SubGroupName, Connection, callback) => {
+		const Query = 'SELECT * FROM FoodsList WHERE SUB_FGROUP = ?';
+		console.log('[Mysql - Foodlist] Retreiving foodlist by sub group name');
+		Connection.query(Query, [SubGroupName], (err, rows, field) => {
+			if (err) {
+				console.log(err);
+				callback(err);
+				return;
+			}
+
+			console.log('[Mysql - Foodlist] Found ' + rows.length + ' results');
+
+			callback(false, rows);
+		});
 	}
 };

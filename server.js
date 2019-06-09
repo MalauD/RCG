@@ -1,4 +1,5 @@
 var express = require('express');
+const RCGTitle = require('./Server/RCGTitle');
 var app = express();
 var path = require('path');
 var fs = require('fs');
@@ -40,6 +41,7 @@ const DBUsers = require('./Server/Authentification/mysql_query_users.js');
 const VerifCredentials = require('./Server/Authentification/Verifications.js');
 const FoodList = require('./Server/mysql_query_foodslist');
 const Authentification = require('./Server/Authentification/Authentification.js');
+const UserVerification = require('./Server/UserVerifications/UserStateVerification.js');
 
 var key = fs.readFileSync('Encryption/key.pem');
 var cert = fs.readFileSync('Encryption/cert.pem');
@@ -50,6 +52,7 @@ var options = {
 	passphrase: 'rcgestlemeilleurdessitesweb'
 };
 
+RCGTitle.Say();
 var Queries = new sqlquery();
 
 app.use(
@@ -99,8 +102,49 @@ app.get('/foodslist/name/:name', (req, res) => {
 	res.sendStatus(500);
 });
 
+app.get('/foodslist/Group/:name', (req, res) => {
+	if (req.params.name) {
+		FoodList.GetFoodsItemByGroup(req.params.name, Queries.connection, (err, resp) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				res.end();
+				return;
+			}
+			res.json(resp);
+		});
+		return;
+	}
+	res.sendStatus(500);
+});
+
+app.get('/foodslist/SubGroup/:name', (req, res) => {
+	if (req.params.name) {
+		FoodList.GetFoodsItemBySubGroup(req.params.name, Queries.connection, (err, resp) => {
+			if (err) {
+				console.log(err);
+				res.sendStatus(500);
+				res.end();
+				return;
+			}
+			res.json(resp);
+		});
+		return;
+	}
+	res.sendStatus(500);
+});
+
 app.get('/foods/name/:id', (req, res) => {
 	Queries.RequestFoodsByName(req.params.id, (err, result) => {
+		if (err) {
+			res.sendStatus(500);
+			res.end();
+		} else res.json(result);
+	});
+});
+
+app.get('/foods/trending/rcg/', (req, res) => {
+	Queries.GetBestRCGMeal(4, (err, result) => {
 		if (err) {
 			res.sendStatus(500);
 			res.end();
@@ -111,8 +155,10 @@ app.get('/foods/name/:id', (req, res) => {
 app.get('/foods/id/:id', (req, res) => {
 	if (req.params.id != 'undefined') {
 		//if the food requested is unchecked, see if the rank is ok to acces this data if not send 500
-		console.log(req.query.Checked + req.session.Rank);
-		if (req.query.Checked == 'false' && !(req.session.Rank < 100) && !req.session.name) {
+		if (
+			req.query.Checked == 'false' &&
+			!UserVerification.IsUserAnAdmin({ name: req.session.name, Rank: req.session.Rank })
+		) {
 			res.sendStatus(500);
 			return;
 		}
@@ -173,7 +219,7 @@ app.post('/foods/admin/delete/:id', (req, res) => {
 	//verify if id isnt empty
 	if (req.params.id != 'undefined') {
 		//verif if user is allowed to perform this action
-		if (req.session.name && req.session.Rank > 100) {
+		if (UserVerification.IsUserAnAdmin({ name: req.session.name, Rank: req.session.Rank })) {
 			Queries.RemoveFoodFromPending(req.params.id, error => {
 				if (error) {
 					console.log(error);
@@ -194,10 +240,10 @@ app.post('/foods/admin/move/:id', (req, res) => {
 	//verify if id isnt empty
 	if (req.params.id != 'undefined') {
 		//verif if user is allowed to perform this action
-		if (req.session.name && req.session.Rank > 100) {
+		if (UserVerification.IsUserAnAdmin({ name: req.session.name, Rank: req.session.Rank })) {
 			//See if the food is checked or not
 			if (req.query.Checked == 'false') {
-				Queries.MoveFoodToNormalDB(req.params.id, err => {
+				Queries.MoveFoodToNormalDB(req.params.id, (err, InsertID) => {
 					if (err) {
 						console.log(err);
 						res.sendStatus(500);
@@ -210,22 +256,15 @@ app.post('/foods/admin/move/:id', (req, res) => {
 							return;
 						}
 
-						Queries.GetLatestInsertedID((errr, resp) => {
-							if (errr) {
-								console.log(errr);
-								return;
-							}
-							console.log('[Foods] Foods has been moved ! Pending --> Normal');
-							res.json({ NewID: resp });
-							return;
-						});
+						res.json({ NewID: InsertID });
+						console.log('[Foods] Foods has been moved ! Pending --> Normal');
 						return;
 					});
 					return;
 				});
 				return;
 			} else if (req.query.Checked == 'true') {
-				Queries.MoveFoodToPendingDB(req.params.id, err => {
+				Queries.MoveFoodToPendingDB(req.params.id, (err, InsertID) => {
 					if (err) {
 						console.log(err);
 						res.sendStatus(500);
@@ -237,16 +276,9 @@ app.post('/foods/admin/move/:id', (req, res) => {
 							res.sendStatus(500);
 							return;
 						}
+						res.json({ NewID: InsertID });
+						console.log('[Foods] Foods has been moved ! Pending --> Normal');
 
-						Queries.GetLatestInsertedID((errr, resp) => {
-							if (errr) {
-								console.log(errr);
-								return;
-							}
-							console.log('[Foods] Foods has been moved ! Pending --> Normal');
-							res.json({ NewID: resp });
-							return;
-						});
 						return;
 					});
 					return;
@@ -259,7 +291,7 @@ app.post('/foods/admin/move/:id', (req, res) => {
 });
 
 app.get('/foods/unchecked', (req, res) => {
-	if (req.session.name && req.session.Rank > 100)
+	if (UserVerification.IsUserAnAdmin({ name: req.session.name, Rank: req.session.Rank }))
 		Queries.QueryDBForFoodUnchecked((Failed, result) => {
 			if (Failed) {
 				res.sendStatus(500);
@@ -348,9 +380,16 @@ app.get('/Logout', (req, res) => {
 
 app.post('/Create', upload.single('ImageFile'), (req, res) => {
 	req.body.Recipe = JSON.parse(req.body.Recipe);
+	req.body.Ingredients = JSON.parse(req.body.Ingredients);
 	VerifCredentials.CreateFormShem.validate(req.body)
 		.then(() => {
 			if (req.file && req.session.name) {
+				//Delete unused params
+				for (const i in req.body.Ingredients) {
+					delete req.body.Ingredients[i].name;
+					delete req.body.Ingredients[i].sciname;
+				}
+				req.body.Ingredients;
 				console.log('[Create - Food] Got a new food submit');
 				console.log('[Create - Food]  Name:' + req.body.Name);
 				console.log('[Create - Food]  RCG:' + req.body.RCG);

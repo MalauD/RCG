@@ -46,7 +46,7 @@ class TopNavConnected extends React.Component {
 						onChange={this.HandleSearchChange}
 					/>
 				</div>
-				{this.props.IsLogged == false ? (
+				{this.props.IsLogged == true ? (
 					<React.Fragment>
 						<Link to="/Contrib">
 							<p className="topnavLink " style={{ float: 'right' }}>

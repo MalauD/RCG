@@ -52,7 +52,7 @@ class SearchPageConnected extends React.Component {
 			this.props.RequestFoodSearch(values.q);
 			//perform the call
 			axios
-				.get('/foods/name/' + values.q)
+				.get('/foods/name/' + values.q + '*')
 				.then(res => {
 					//On api rep send to redux the api result
 					this.props.ReceiveFood(res.data);

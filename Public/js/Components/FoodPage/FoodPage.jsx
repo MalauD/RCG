@@ -5,12 +5,20 @@ import queryString from 'query-string';
 import StepRecipeElement from './StepRecipeElement';
 import RCGCounter from './RCGCounter';
 import AdminTools from '../Admin/AdminTools';
+import IngredientsList from '../Creation/IngredientsList';
 
 import { connect } from 'react-redux';
+import { UpdateIngredients } from '../../Actions/Action';
 
 const mapStateToProps = state => {
 	return { Rank: state.AccountReducer.Rank };
 };
+
+function mapDispatchToProps(dispatch) {
+	return {
+		UpdateIngredients: IngredientList => dispatch(UpdateIngredients(IngredientList))
+	};
+}
 
 class FoodPageConnected extends React.Component {
 	constructor(props) {
@@ -33,6 +41,7 @@ class FoodPageConnected extends React.Component {
 
 	ApiFetch() {
 		const values = queryString.parse(this.props.location.search);
+		console.log(values);
 		this.setState({ IsCheckedFood: values.Checked });
 		//Get api res for food with specified id and checked.
 		axios
@@ -40,6 +49,7 @@ class FoodPageConnected extends React.Component {
 			.then(res => {
 				//Set state to the api response
 				this.setState({ ApiResult: res.data });
+				if (res.data.Ingredients) this.props.UpdateIngredients(res.data.Ingredients);
 			})
 			.catch(err => {
 				//TODO Redirect to error perm
@@ -53,30 +63,56 @@ class FoodPageConnected extends React.Component {
 				<div className="AccountContent">
 					{this.state.ApiResult && (
 						<div className="FoodPage">
-							<p className="FoodPageName">{this.state.ApiResult.Name}</p>
-							{/* <RCGCounter
+							<div className="RowContainer">
+								<div className="FoodDesc">
+									<p className="FoodPageName">{this.state.ApiResult.Name}</p>
+									{/* <RCGCounter
 								FoodInfo={{ RCG: this.state.ApiResult.RCG, idFoods: this.state.ApiResult.idFoods }}
 							/> */}
 
-							<div className="RCGCounter">
-								<p> RCG </p>
-								<p>{this.state.ApiResult.RCG}</p>
+									{this.state.ApiResult.PrepTime && (
+										<p style={{ marginTop: '10px' }} className="MealStep">
+											{this.state.ApiResult.PrepTime} min - For {this.state.ApiResult.People}{' '}
+											people
+										</p>
+									)}
+
+									<div className="RCGCounter">
+										<p> RCG </p>
+										<p>{this.state.ApiResult.RCG}</p>
+									</div>
+								</div>
+								<div className="RowContainer">
+									<img src={this.state.ApiResult.ImageLink} className="ImageFood" />
+								</div>
 							</div>
 
-							<img src={this.state.ApiResult.ImageLink} className="ImageFood" />
-							<p className="FoodLabel" style={{ marginTop: '8px', fontSize: '1.5em' }}>
-								Recipe
-							</p>
-							<div>
-								{this.state.ApiResult.Content.map(Step => {
-									return (
-										<StepRecipeElement
-											key={Step.Number}
-											StepNumber={Step.Number}
-											StepRecipe={Step.Recipe}
-										/>
-									);
-								})}
+							<div className="RowContainer" style={{ marginTop: '20px' }}>
+								{this.state.ApiResult.Ingredients && (
+									<div>
+										<p
+											className="FoodLabel"
+											style={{ marginTop: '8px', marginBottom: '15px', fontSize: '1.5em' }}
+										>
+											Ingredients for {this.state.ApiResult.People} people
+										</p>
+										<IngredientsList IsCreaction={false} />
+									</div>
+								)}
+								<div>
+									<p className="FoodLabel" style={{ marginTop: '8px', fontSize: '1.5em' }}>
+										Recipe
+									</p>
+									{this.state.ApiResult.Content.map(Step => {
+										return (
+											<StepRecipeElement
+												key={Step.Number}
+												StepNumber={Step.Number}
+												StepRecipe={Step.Recipe}
+											/>
+										);
+									})}
+								</div>
 							</div>
 							{this.props.Rank > 100 && (
 								<AdminTools
@@ -92,6 +128,9 @@ class FoodPageConnected extends React.Component {
 	}
 }
 
-const FoodPage = connect(mapStateToProps)(FoodPageConnected);
+const FoodPage = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(FoodPageConnected);
 
 export default FoodPage;

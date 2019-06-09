@@ -37,6 +37,7 @@ class FoodContainerConnected extends React.Component {
 						key={fooditem.idFoods}
 						idFoods={fooditem.idFoods}
 						IsChecked={this.props.IsCheckedFood}
+						PrepTime={fooditem.PrepTime}
 						RCG={fooditem.RCG}
 					/>
 				);

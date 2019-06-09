@@ -167,6 +167,7 @@ body {
 .AccountContent input[type=number],
 .AccountContent textarea {
     border: 1px solid grey;
+    padding: 10px
 }
 
 /* Style The Dropdown Button */
@@ -244,13 +245,14 @@ body {
     z-index: 1;
     margin: 20px;
     padding-bottom: 20px;
-    border: 1px solid #ccc;
-    background-color: white;
+    border: 1px solid transparent;
+    background-color: transparent;
     float: left;
     height: auto;
     width: 45%;
     border-radius: 10px;
     transition: width 0.1s, height 0.1s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.05);
 }
 
 .Card img {
@@ -275,11 +277,19 @@ body {
     margin: 20px 10px;
 }
 
+.Card .CardAttr {
+    font-size: 16px;
+    color: grey;
+    text-align: right;
+    float: right;
+}
+
 .CardRCG {
     position: absolute;
     left: 20px;
-    background: rgba(255, 255, 255, 0.603);
-    border: 2px solid grey;
+    background: rgb(255, 255, 255, 2);
+    filter: invert(20%);
+    border: 1px solid whitesmoke;
     border-top: none;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -287,7 +297,9 @@ body {
 
 .CardRCG p {
     margin: 20px;
-    font-weight: bold;
+    font-weight: 300;
+    filter: invert(100%);
+    font-size: 14px;
 }
 
 .desc {
@@ -474,7 +486,14 @@ body {
 .FoodPageName {
     font-size: 2.5em;
     text-align: center;
+    padding: 10px;
+    margin: 0px 0px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+}
 
+.FoodDesc {
+    padding: 0px 0px;
+    margin-right: 1.5%
 }
 
 .RCGCounter {
@@ -489,6 +508,7 @@ body {
     align-items: center;
     border: 1px solid grey;
     border-radius: 5px;
+    margin: 20px 0px;
 }
 
 .RCGCounter p {
@@ -525,17 +545,17 @@ body {
 
 
 .ImageFood {
-    margin: 10px;
     max-width: 30vw;
     object-fit: scale-down;
     object-position: 0px 0px;
     height: auto;
     border-radius: 8px 8px;
-    margin: 30px 0px;
 }
 
 .FoodLabel {
     font-size: 1.1em;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
 }
 
 .FoodPage {}
@@ -588,18 +608,21 @@ body {
     border: 1px solid black;
 }
 
-.FoodListSelector {}
+.FoodListSelector {
+    display: inline-block;
+    width: 400px;
+}
 
 .FoodListSec {
     color: grey;
-    margin: 5px 10px;
+    margin: 2px 5px;
 }
 
 .FoodListSelector input {
     margin: 0px 0px;
     font-size: 16px;
     color: grey;
-    width: 12%;
+    width: 400px;
     flex: 1;
     border: 1px solid rgb(237, 239, 241);
     border-top-left-radius: 4px;
@@ -608,20 +631,118 @@ body {
     padding: 8px 10px;
 }
 
+.FoodListSelector input:focus {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+}
+
 .FoodListItemContainer {
-    width: 12%;
     border: 1px solid grey;
     border-top: none;
-    padding: 8px;
+    padding-top: 4px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
 .FoodListItem {
-    margin: 10px;
+    margin: 0px 10px;
+    padding: 5px 10px;
+    width: 380px;
 }
 
-@media screen and (max-width: 1000px) {
+.FoodListItem:hover {
+    cursor: pointer;
+    color: rgb(0);
+    background-color: rgba(0, 0, 0, 0.02)
+}
+
+.RowContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 5px;
+}
+
+.IngredientsListContainer {
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 100%;
+    width: auto;
+    overflow: auto;
+    flex-grow: 20;
+}
+
+.QtyFoodItem {
+    padding: 20px;
+    margin: 0px 5px;
+    flex-grow: 3;
+    border-radius: 5px;
+}
+
+.plusSign {
+    font-size: 32px;
+    float: right;
+}
+
+.plusSign:hover {
+    color: grey;
+    font-weight: bold;
+}
+
+.Breadcrumbs {
+    float: right;
+    display: flex;
+    flex-direction: row;
+    margin: 8px;
+}
+
+.BreadcrumbsItem {
+    font-size: 16px;
+    color: grey;
+    margin: 0px 2px;
+    padding: 5px;
+}
+
+.Spreader {
+    flex-grow: 6;
+    width: 20%
+}
+
+.IngredientCollection {
+    margin: 2%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.BackgroundContainer {
+    height: auto;
+    width: 100vw;
+    background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%);
+}
+
+.textContainer h1 {
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 4vw;
+    margin: 20px;
+}
+
+.textContainer p {
+    color: whitesmoke;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.8vw;
+    margin: 20px;
+}
+
+.textContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 5%;
+    text-overflow: clip;
+}
+
+@media screen and (max-width: 800px) {
 
 
 
@@ -690,13 +811,15 @@ body {
     }
 
     .ImageFood {
-        max-width: unset;
-        width: 100%;
         object-fit: unset;
     }
 
     .FoodLabel {
         font-size: 32px;
+    }
+
+    .RowContainer {
+        flex-direction: column;
     }
 }
 

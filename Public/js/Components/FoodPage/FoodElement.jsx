@@ -14,8 +14,11 @@ class FoodElement extends React.Component {
 					<p>{this.props.RCG}</p>
 				</div>
 				<img src={this.props.ImageLink} />
-
-				<p>{this.props.Name}</p>
+				<div className="RowContainer">
+					<p>{this.props.Name}</p>
+					<div style={{ flexGrow: 4 }} />
+					{this.props.PrepTime && <p className="CardAttr">{this.props.PrepTime} min</p>}
+				</div>
 			</div>
 		);
 	};

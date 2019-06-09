@@ -64,3 +64,39 @@ export function FailFood(err) {
 		FailAt: Date.now()
 	};
 }
+
+export const ADD_INGREDIENT = 'ADD_INGREDIENT';
+export const REMOVE_INGREDIENT = 'REMOVE_INGREDIENT';
+export const CHANGE_QTY = 'CHANGE_QTY';
+export const UPDATE_INGREDIENTS = 'UPDATE_INGREDIENTS';
+
+export function AddIngredient(Ingredient, ContextType) {
+	return {
+		type: ADD_INGREDIENT,
+		Ingredient,
+		ContextType
+	};
+}
+
+export function RemoveIngredient(id, ContextType) {
+	return {
+		type: REMOVE_INGREDIENT,
+		id,
+		ContextType
+	};
+}
+
+export function ChangeQty(id, qty) {
+	return {
+		type: CHANGE_QTY,
+		id,
+		qty
+	};
+}
+
+export function UpdateIngredients(IngredientList) {
+	return {
+		type: UPDATE_INGREDIENTS,
+		IngredientList
+	};
+}
