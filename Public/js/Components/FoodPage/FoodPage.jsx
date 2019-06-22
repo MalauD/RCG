@@ -9,6 +9,7 @@ import IngredientsList from '../Creation/IngredientsList';
 
 import { connect } from 'react-redux';
 import { UpdateIngredients } from '../../Actions/Action';
+import UserElement from '../Account/UserElement';
 
 const mapStateToProps = state => {
 	return { Rank: state.AccountReducer.Rank };
@@ -16,7 +17,8 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		UpdateIngredients: IngredientList => dispatch(UpdateIngredients(IngredientList))
+		UpdateIngredients: IngredientList =>
+			dispatch(UpdateIngredients(IngredientList))
 	};
 }
 
@@ -41,15 +43,20 @@ class FoodPageConnected extends React.Component {
 
 	ApiFetch() {
 		const values = queryString.parse(this.props.location.search);
-		console.log(values);
 		this.setState({ IsCheckedFood: values.Checked });
 		//Get api res for food with specified id and checked.
 		axios
-			.get('/foods/id/' + this.props.match.params.idFoods + '?Checked=' + values.Checked)
+			.get(
+				'/Meals/Search/Id/' +
+					this.props.match.params.idFoods +
+					'?Checked=' +
+					values.Checked
+			)
 			.then(res => {
 				//Set state to the api response
 				this.setState({ ApiResult: res.data });
-				if (res.data.Ingredients) this.props.UpdateIngredients(res.data.Ingredients);
+				if (res.data.Ingredients)
+					this.props.UpdateIngredients(res.data.Ingredients);
 			})
 			.catch(err => {
 				//TODO Redirect to error perm
@@ -65,14 +72,20 @@ class FoodPageConnected extends React.Component {
 						<div className="FoodPage">
 							<div className="RowContainer">
 								<div className="FoodDesc">
-									<p className="FoodPageName">{this.state.ApiResult.Name}</p>
+									<p className="FoodPageName">
+										{this.state.ApiResult.Name}
+									</p>
 									{/* <RCGCounter
 								FoodInfo={{ RCG: this.state.ApiResult.RCG, idFoods: this.state.ApiResult.idFoods }}
 							/> */}
 
 									{this.state.ApiResult.PrepTime && (
-										<p style={{ marginTop: '10px' }} className="MealStep">
-											{this.state.ApiResult.PrepTime} min - For {this.state.ApiResult.People}{' '}
+										<p
+											style={{ marginTop: '10px' }}
+											className="MealStep"
+										>
+											{this.state.ApiResult.PrepTime} min
+											- For {this.state.ApiResult.People}{' '}
 											people
 										</p>
 									)}
@@ -81,26 +94,57 @@ class FoodPageConnected extends React.Component {
 										<p> RCG </p>
 										<p>{this.state.ApiResult.RCG}</p>
 									</div>
+									<UserElement
+										UserId={
+											this.state.ApiResult.Creator.uidkey
+										}
+										Name={this.state.ApiResult.Creator.name}
+										Rank={this.state.ApiResult.Creator.rank}
+										Image={
+											this.state.ApiResult.Creator
+												.ImageLink
+										}
+									/>
 								</div>
 								<div className="RowContainer">
-									<img src={this.state.ApiResult.ImageLink} className="ImageFood" />
+									<img
+										src={this.state.ApiResult.ImageLink}
+										className="ImageFood"
+									/>
 								</div>
 							</div>
 
-							<div className="RowContainer" style={{ marginTop: '20px' }}>
+							<div
+								className="RowContainer"
+								style={{
+									marginTop: '20px',
+									flexWrap: 'nowrap'
+								}}
+							>
 								{this.state.ApiResult.Ingredients && (
 									<div>
 										<p
 											className="FoodLabel"
-											style={{ marginTop: '8px', marginBottom: '15px', fontSize: '1.5em' }}
+											style={{
+												marginTop: '8px',
+												marginBottom: '15px',
+												fontSize: '1.5em'
+											}}
 										>
-											Ingredients for {this.state.ApiResult.People} people
+											Ingredients for{' '}
+											{this.state.ApiResult.People} people
 										</p>
 										<IngredientsList IsCreaction={false} />
 									</div>
 								)}
 								<div>
-									<p className="FoodLabel" style={{ marginTop: '8px', fontSize: '1.5em' }}>
+									<p
+										className="FoodLabel"
+										style={{
+											marginTop: '8px',
+											fontSize: '1.5em'
+										}}
+									>
 										Recipe
 									</p>
 									{this.state.ApiResult.Content.map(Step => {

@@ -15,6 +15,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import IngredientPage from './Components/FoodPage/IngredientPage';
 import IngredientGroupPage from './Components/FoodPage/IngredientGroupPage';
+import UserPage from './Components/Account/UserPage';
 
 class App extends React.Component {
 	constructor(props) {
@@ -33,13 +34,26 @@ class App extends React.Component {
 						<Route path="/Login" component={LoginPage} />
 						<Route path="/Signup" component={RegisterPage} />
 						<Route path="/Search" component={SearchPage} />
-						<Route path="/Food/:idFoods/Food" component={FoodPage} />
+						<Route
+							path="/Food/:idFoods/Food"
+							component={FoodPage}
+						/>
 						<Route path="/Contrib" component={ContribPage} />
 						<Route path="/Create" component={CreatePage} />
 						<Route path="/Admin" component={AdminPage} />
-						<Route path="/Ingredient/Name/:id" component={IngredientPage} />
-						<Route path="/Ingredient/Group/:name" component={IngredientGroupPage} />
-						<Route path="/Ingredient/SubGroup/:name" component={IngredientGroupPage} />
+						<Route
+							path="/Ingredient/Name/:id"
+							component={IngredientPage}
+						/>
+						<Route
+							path="/Ingredient/Group/:name"
+							component={IngredientGroupPage}
+						/>
+						<Route
+							path="/Ingredient/SubGroup/:name"
+							component={IngredientGroupPage}
+						/>
+						<Route path="/Users/:UserId" component={UserPage} />
 					</div>
 					<div id="Footer">
 						<p>&copy; 2019 - RCG Company</p>

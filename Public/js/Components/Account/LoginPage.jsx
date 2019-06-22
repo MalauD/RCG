@@ -73,17 +73,19 @@ class LoginPageConnected extends React.Component {
 	OnSubmitLogin = () => {
 		//Make a post request using custom header to send it at JSON (see: https://stackoverflow.com/questions/29775797/fetch-post-json-data)
 		axios
-			.post('/Login', {
+			.post('/Auth/Login', {
 				Mail: this.state.EmailField,
 				Password: this.state.PasswordField
 			})
 			.then(result => {
 				//If there is no html error redirect to the homepage (user logged in)
 				// Other wise display errors
+				console.log(result.data);
 				this.props.SaveUser(result.data.User);
 				this.props.history.push('/');
 			})
 			.catch(res => {
+				console.log(res.response);
 				this.DisplayError(res.response.data);
 			});
 	};
@@ -99,12 +101,26 @@ class LoginPageConnected extends React.Component {
 	DisplayError = err => {
 		//this function display error (see states def for more details)
 		if (err.param == 'Mail') {
-			this.setState({ LabelError: { Mail: 'Mail ' + err.err, Password: 'Password' } });
-			this.setState({ InputCSSError: { Mail: { borderBottom: '2px solid red' }, Password: {} } });
+			this.setState({
+				LabelError: { Mail: 'Mail ' + err.err, Password: 'Password' }
+			});
+			this.setState({
+				InputCSSError: {
+					Mail: { borderBottom: '2px solid red' },
+					Password: {}
+				}
+			});
 		}
 		if (err.param == 'Password') {
-			this.setState({ LabelError: { Mail: 'Mail', Password: 'Password ' + err.err } });
-			this.setState({ InputCSSError: { Mail: {}, Password: { borderBottom: '2px solid red' } } });
+			this.setState({
+				LabelError: { Mail: 'Mail', Password: 'Password ' + err.err }
+			});
+			this.setState({
+				InputCSSError: {
+					Mail: {},
+					Password: { borderBottom: '2px solid red' }
+				}
+			});
 		}
 	};
 }

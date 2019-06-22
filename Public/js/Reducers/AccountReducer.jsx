@@ -1,10 +1,11 @@
-import { SAVE_USER, LOGOUT_USER } from '../Actions/Action';
+import { SAVE_USER, LOGOUT_USER, UPDATE_IMAGE } from '../Actions/Action';
 
 const InitialState = {
 	IsLogged: false,
 	Name: '',
 	Rank: '',
-	Mail: ''
+	Mail: '',
+	ImageLink: '/FoodImage/DefaultAccount.png'
 };
 
 export default function AccountReducer(state = InitialState, action) {
@@ -14,14 +15,20 @@ export default function AccountReducer(state = InitialState, action) {
 				IsLogged: true,
 				Name: action.Name,
 				Rank: action.Rank,
-				Mail: action.Mail
+				Mail: action.Mail,
+				ImageLink: action.ImageLink
 			});
 		case LOGOUT_USER:
 			return Object.assign({}, state, {
 				IsLogged: false,
 				Name: action.Name,
 				Rank: action.Rank,
-				Mail: action.Mail
+				Mail: action.Mail,
+				ImageLink: action.ImageLink
+			});
+		case UPDATE_IMAGE:
+			return Object.assign({}, state, {
+				ImageLink: action.ImageLink
 			});
 		default:
 			return state;

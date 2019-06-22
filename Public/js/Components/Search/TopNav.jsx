@@ -49,7 +49,10 @@ class TopNavConnected extends React.Component {
 				{this.props.IsLogged == true ? (
 					<React.Fragment>
 						<Link to="/Contrib">
-							<p className="topnavLink " style={{ float: 'right' }}>
+							<p
+								className="topnavLink "
+								style={{ float: 'right' }}
+							>
 								Contributions
 							</p>
 						</Link>

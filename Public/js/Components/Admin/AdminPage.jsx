@@ -44,7 +44,7 @@ class AdminPageConnected extends React.Component {
 			this.props.RequestUncheckedFood();
 			//Perform the api call
 			axios
-				.get('/foods/unchecked')
+				.get('/Meals/Unchecked')
 				.then(res => {
 					//On api rep send to redux the api result
 					this.props.ReceiveFood(res.data);

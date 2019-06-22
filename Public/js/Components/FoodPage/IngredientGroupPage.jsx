@@ -16,10 +16,10 @@ class IngredientGroupPage extends React.Component {
 		//determine if it about group or sub group
 		// ! Creat a state variable for it ???
 		if (this.props.location.pathname == '/Ingredient/Group/' + this.props.match.params.name) {
-			var url = ' /foodslist/Group/' + this.props.match.params.name;
+			var url = '/Ingredients/Group/name/' + this.props.match.params.name;
 			this.setState({ IsGroup: true });
 		} else {
-			var url = ' /foodslist/SubGroup/' + this.props.match.params.name;
+			var url = '/Ingredients/SubGroup/name/' + this.props.match.params.name;
 			this.setState({ IsGroup: true });
 		}
 

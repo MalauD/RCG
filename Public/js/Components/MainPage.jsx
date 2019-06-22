@@ -33,7 +33,7 @@ class MainPage extends React.Component {
 					<div className="textContainer">
 						{this.state.ApiResult.length > 1 && (
 							<FoodElement
-								idFoods={this.state.ApiResult[0].idFoods}
+								idFoods={this.state.ApiResult[1].idFoods}
 								style={{ float: 'left' }}
 								Name={this.state.ApiResult[1].Name}
 								ImageLink={this.state.ApiResult[1].ImageLink}
@@ -54,9 +54,8 @@ class MainPage extends React.Component {
 	};
 
 	componentDidMount = () => {
-		Axios.get('/foods/trending/rcg/')
+		Axios.get('/Meals/Trending/rcg/')
 			.then(res => {
-				console.log(res.data);
 				this.setState({ ApiResult: res.data });
 			})
 			.catch();

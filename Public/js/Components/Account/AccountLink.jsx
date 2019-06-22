@@ -23,7 +23,9 @@ class AccountLinkConnected extends React.Component {
 		return (
 			<div className="dropdown">
 				<Link to="/Account">
-					<button className="dropbtn">{this.props.Name ? this.props.Name : 'Account'}</button>
+					<button className="dropbtn">
+						{this.props.Name ? this.props.Name : 'Account'}
+					</button>
 				</Link>
 				<div className="dropdown-content">
 					<Link
@@ -35,7 +37,11 @@ class AccountLinkConnected extends React.Component {
 						Create
 					</Link>
 					<Link to="/Contrib">
-						<p className="topnavLink " id="AccountLink" style={{ float: 'right', width: '100% ' }}>
+						<p
+							className="topnavLink "
+							id="AccountLink"
+							style={{ float: 'right', width: '100% ' }}
+						>
 							Contributions
 						</p>
 					</Link>
@@ -63,7 +69,7 @@ class AccountLinkConnected extends React.Component {
 	};
 
 	Logout = () => {
-		fetch('/Logout').then(() => {
+		fetch('/Auth/Logout').then(() => {
 			this.props.LogoutUser();
 		});
 	};

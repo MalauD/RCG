@@ -26,7 +26,7 @@ class FoodListItemConnected extends React.Component {
 
 	componentDidMount = () => {
 		if (this.props.Context == VIEW) {
-			Axios.get('/foodslist/id/' + this.props.id)
+			Axios.get('/Ingredients/Search/id/' + this.props.id)
 				.then(res => {
 					this.setState({ name: res.data.FOOD_NAME, sciname: res.data.SCIENTIFIC_NAME });
 				})

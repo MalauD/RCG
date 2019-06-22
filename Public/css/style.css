@@ -170,6 +170,13 @@ body {
     padding: 10px
 }
 
+.AccountImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px;
+}
+
 /* Style The Dropdown Button */
 .dropbtn {
     font-size: 16px;
@@ -724,14 +731,14 @@ body {
 .textContainer h1 {
     color: white;
     font-family: 'Times New Roman', Times, serif;
-    font-size: 4vw;
+    font-size: 48px;
     margin: 20px;
 }
 
 .textContainer p {
     color: whitesmoke;
     font-family: 'Times New Roman', Times, serif;
-    font-size: 1.8vw;
+    font-size: 28px;
     margin: 20px;
 }
 
@@ -740,6 +747,48 @@ body {
     flex-direction: row;
     padding: 5%;
     text-overflow: clip;
+}
+
+.UpdateImageButton {
+    padding: 4px;
+    margin: 10px;
+    border: 1px solid grey;
+    border-radius: 8px;
+}
+
+.UpdateImageButton:hover {
+    border-color: black;
+}
+
+.UserElement {
+    border-bottom: 1px solid gainsboro;
+    border-radius: 10px;
+    width: max-content;
+}
+
+.UserElement:hover {
+    border-color: grey;
+}
+
+.UserElement img {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+}
+
+.UserElement p {
+    font-size: 20px;
+}
+
+.UserElement h1 {
+    font-size: 16px;
+    color: grey;
+    font-weight: 300;
+}
+
+.UserElement div {
+    margin: 5px 20px;
+
 }
 
 @media screen and (max-width: 800px) {

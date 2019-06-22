@@ -196,7 +196,7 @@ class CreatePageConnected extends React.Component {
 					data.append('Ingredients', JSON.stringify(this.props.IngredientList));
 
 					//Send datas to the server
-					fetch('/Create', {
+					fetch('/Meals/Create', {
 						method: 'POST',
 						body: data
 					}).then(result => {

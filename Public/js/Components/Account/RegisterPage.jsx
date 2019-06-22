@@ -85,7 +85,7 @@ class RegisterPageConnected extends React.Component {
 
 	OnSubmitRegister = () => {
 		axios
-			.post('/Signup', {
+			.post('/Auth/Signup', {
 				Name: this.state.NameField,
 				Mail: this.state.EmailField,
 				Password: this.state.PasswordField

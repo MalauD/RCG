@@ -29,7 +29,7 @@ class AdminTools extends React.Component {
 
 	OnMoveClick = () => {
 		axios
-			.post('/foods/admin/move/' + this.props.idFoods + '?Checked=' + this.props.IsChecked)
+			.post('/Admin/Move/Meal/' + this.props.idFoods + '?Checked=' + this.props.IsChecked)
 			.then(res => {
 				// ! In test
 				console.log(this.props.IsChecked);
@@ -48,7 +48,7 @@ class AdminTools extends React.Component {
 
 	OnDeleteClick = () => {
 		axios
-			.post('/foods/admin/delete/' + this.props.idFoods)
+			.post('/Admin/Delete/Meal/' + this.props.idFoods)
 			.then(res => {
 				//Todo add notif
 				this.props.history.push('/');

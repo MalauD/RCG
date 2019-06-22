@@ -58,7 +58,7 @@ class FoodListSelector extends React.Component {
 
 	ApiCall() {
 		if (this.state.FoodSearch) {
-			Axios.get('/foodslist/name/' + this.state.FoodSearch + '*')
+			Axios.get('/Ingredients/Search/name/' + this.state.FoodSearch + '*')
 				.then(res => {
 					//On fetch complete copy rep to state
 					this.setState({ ApiResult: res.data });

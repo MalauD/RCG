@@ -2,13 +2,15 @@ import { ADMIN, SEARCH } from '../Constants/SearchTypes';
 
 export const SAVE_USER = 'SAVE_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
+export const UPDATE_IMAGE = 'UPDATE_IMAGE';
 
 export function SaveUser(User) {
 	return {
 		type: SAVE_USER,
-		Name: User.Name,
-		Rank: User.Rank,
-		Mail: User.Mail
+		Name: User.name,
+		Rank: User.rank,
+		Mail: User.mail,
+		ImageLink: User.ImageLink
 	};
 }
 
@@ -17,7 +19,15 @@ export function LogoutUser() {
 		type: LOGOUT_USER,
 		Name: '',
 		Rank: '',
-		Mail: ''
+		Mail: '',
+		ImageLink: ''
+	};
+}
+
+export function UpdateImage(ImageLink) {
+	return {
+		type: UPDATE_IMAGE,
+		ImageLink
 	};
 }
 

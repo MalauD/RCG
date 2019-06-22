@@ -49,7 +49,7 @@ class ContribPageConnected extends React.Component {
 			this.props.RequestContribFood();
 			//Perform the api call
 			axios
-				.get('/foods/contrib')
+				.get('/Meals/Contrib')
 				.then(res => {
 					//On api rep send to redux the api result
 					this.props.ReceiveFood(res.data);

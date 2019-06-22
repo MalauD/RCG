@@ -17,7 +17,7 @@ class IngredientPage extends React.Component {
 	}
 
 	ApiFetch = () => {
-		Axios.get('/foodslist/id/' + this.props.match.params.id)
+		Axios.get('/Ingredients/Search/id/' + this.props.match.params.id)
 			.then(res => {
 				this.setState({ ApiResult: res.data });
 			})
