@@ -7,7 +7,8 @@ class MainPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			ApiResult: []
+			ApiResult: [],
+			ApiResult2: []
 		};
 	}
 
@@ -15,38 +16,45 @@ class MainPage extends React.Component {
 		return (
 			<div>
 				<div className="BackgroundContainer">
-					<div className="textContainer">
-						<h1>Need a good meal right away ?</h1>
+					<div className="ColumnDiv Espacer">
+						<h1 className="FoodLabel">Best meals by rcg rating</h1>
 						<div className="Spreader" />
 						{this.state.ApiResult.length > 0 && (
-							<FoodElement
-								idFoods={this.state.ApiResult[0].idFoods}
-								style={{ float: 'right' }}
-								Name={this.state.ApiResult[0].Name}
-								ImageLink={this.state.ApiResult[0].ImageLink}
-								RCG={this.state.ApiResult[0].RCG}
-								PrepTime={this.state.ApiResult[0].PrepTime}
-								IsChecked={true}
-							/>
+							<div className="RowDiv">
+								{this.state.ApiResult.map(item => (
+									<FoodElement
+										key={item.idFoods}
+										idFoods={item.idFoods}
+										style={{ float: 'right' }}
+										Name={item.Name}
+										ImageLink={item.ImageLink}
+										RCG={item.RCG}
+										PrepTime={item.PrepTime}
+										IsChecked={true}
+									/>
+								))}
+							</div>
 						)}
 					</div>
-					<div className="textContainer">
-						{this.state.ApiResult.length > 1 && (
-							<FoodElement
-								idFoods={this.state.ApiResult[1].idFoods}
-								style={{ float: 'left' }}
-								Name={this.state.ApiResult[1].Name}
-								ImageLink={this.state.ApiResult[1].ImageLink}
-								RCG={this.state.ApiResult[1].RCG}
-								PrepTime={this.state.ApiResult[1].PrepTime}
-								IsChecked={true}
-							/>
-						)}
+					<div className="ColumnDiv Espacer">
+						<h1 className="FoodLabel">Random selection</h1>
 						<div className="Spreader" />
-						<div style={{ float: 'right' }}>
-							<h1>You are at the right place !</h1>
-							<p>&bull; M'I Meal provides delightful meals that are easy to make</p>
-						</div>
+						{this.state.ApiResult2.length > 0 && (
+							<div className="RowDiv">
+								{this.state.ApiResult2.map(item => (
+									<FoodElement
+										key={item.idFoods}
+										idFoods={item.idFoods}
+										style={{ float: 'right' }}
+										Name={item.Name}
+										ImageLink={item.ImageLink}
+										RCG={item.RCG}
+										PrepTime={item.PrepTime}
+										IsChecked={true}
+									/>
+								))}
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
@@ -57,6 +65,11 @@ class MainPage extends React.Component {
 		Axios.get('/Meals/Trending/rcg/')
 			.then(res => {
 				this.setState({ ApiResult: res.data });
+			})
+			.catch();
+		Axios.get('/Meals/Trending/random/')
+			.then(res => {
+				this.setState({ ApiResult2: res.data });
 			})
 			.catch();
 	};

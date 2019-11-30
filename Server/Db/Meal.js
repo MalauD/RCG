@@ -2,8 +2,7 @@ var db = require('./Db');
 
 module.exports = {
 	QueryDBForMeal(foodname, callback) {
-		const Query =
-			'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods WHERE MATCH(Name,Content) AGAINST(? IN BOOLEAN MODE)';
+		const Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods WHERE MATCH(Name,Content) AGAINST(? IN BOOLEAN MODE)';
 		console.log('[MySql - Food] Requesting DB for food');
 		db.query(Query, [foodname], (err, rows, field) => {
 			if (err) {
@@ -57,7 +56,7 @@ module.exports = {
 	},
 
 	QueryDBForMealUnchecked(callback) {
-		const Query = 'SELECT * FROM foodsnew';
+		const Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foodsnew';
 		console.log('[MySql - Food] Requesting DB for unchecked');
 
 		db.query(Query, (err, rows, field) => {
@@ -68,22 +67,7 @@ module.exports = {
 				return;
 			}
 
-			let resp = [];
-			for (var k in rows) {
-				//console.log(rows[k].Content);
-				if (rows[k].Content) {
-					rows[k].Content = JSON.parse(rows[k].Content);
-				} else {
-					console.log('[MySql - Food] No recipe found for this id');
-				}
-
-				if (rows[k].Ingredients) {
-					rows[k].Ingredients = JSON.parse(rows[k].Ingredients);
-				} else {
-					console.log('[MySql - Food] No ingredients list found for this id');
-				}
-				resp.push(rows[k]);
-			}
+			let resp = ExtractJSON(rows);
 
 			console.log('[MySql - Food] Found ' + resp.length + ' results');
 
@@ -92,7 +76,7 @@ module.exports = {
 	},
 
 	QueryDBForContrib(userhash, callback) {
-		const Query = 'SELECT * FROM foods WHERE userhash = ?';
+		const Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods WHERE userhash = ?';
 		console.log('[MySql - Food] Requesting DB for contrib food');
 
 		db.query(Query, [userhash], (err, rows, field) => {
@@ -103,22 +87,7 @@ module.exports = {
 				return;
 			}
 
-			let resp = [];
-			for (var k in rows) {
-				//console.log(rows[k].Content);
-				if (rows[k].Content) {
-					rows[k].Content = JSON.parse(rows[k].Content);
-				} else {
-					console.log('[MySql - Food] No recipe found for this id');
-				}
-
-				if (rows[k].Ingredients) {
-					rows[k].Ingredients = JSON.parse(rows[k].Ingredients);
-				} else {
-					console.log('[MySql - Food] No ingredients list found for this id');
-				}
-				resp.push(rows[k]);
-			}
+			let resp = ExtractJSON(rows);
 
 			console.log('[MySql - Food] Found ' + resp.length + ' results');
 
@@ -126,11 +95,52 @@ module.exports = {
 		});
 	},
 
+	QueryDBForFoodByIngredientsID: (IngredientsIDs, callback) => {
+		console.log('[Mysql - Food] Getting foods containing ' + IngredientsIDs.length + ' Ingredient');
+		let Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods WHERE Ingredients LIKE ';
+		for (let i = 0; i < IngredientsIDs.length; i++) {
+			if (isNumber(IngredientsIDs[i])) {
+				let subQuery = '%"id":' + IngredientsIDs[i] + '%';
+				if (i == IngredientsIDs.length - 1) var endQuery = "' ";
+				else var endQuery = "' OR Ingredients LIKE ";
+				Query += "'" + subQuery + endQuery;
+			}
+		}
+		console.log(Query);
+		db.query(Query, (err, rows, field) => {
+			if (err) {
+				console.log('[MySql - Food] Error !');
+				callback(err);
+				return;
+			}
+
+			console.log('[MySql - Food] Found ' + rows.length + ' results');
+
+			callback(false, rows);
+		});
+	},
+
 	GetBestRCGMeal: (limit, callback) => {
 		//Get the best rcg food;
-		const Query =
-			'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods ORDER BY RCG DESC LIMIT ?';
+		const Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods ORDER BY RCG DESC LIMIT ?';
 		console.log('[MySql - Food] Getting the best rcg food');
+		db.query(Query, [limit], (err, rows, field) => {
+			if (err) {
+				console.log('[MySql - Food] Error !');
+				callback(err);
+				return;
+			}
+
+			console.log('[MySql - Food] Found ' + rows.length + ' results');
+
+			callback(false, rows);
+		});
+	},
+
+	GetRandomMeal: (limit, callback) => {
+		//Get random meal in the DB
+		const Query = 'SELECT idFoods, Name, ImageLink, RCG, PrepTime, People,CreatedAt FROM foods ORDER BY RAND() DESC LIMIT ?';
+		console.log('[MySql - Food] Getting random food');
 		db.query(Query, [limit], (err, rows, field) => {
 			if (err) {
 				console.log('[MySql - Food] Error !');
@@ -170,3 +180,24 @@ module.exports = {
 		});
 	}
 };
+function ExtractJSON(rows) {
+	let resp = [];
+	for (var k in rows) {
+		//console.log(rows[k].Content);
+		if (rows[k].Content) {
+			rows[k].Content = JSON.parse(rows[k].Content);
+		} else {
+			console.log('[MySql - Food] No recipe found for this id');
+		}
+		if (rows[k].Ingredients) {
+			rows[k].Ingredients = JSON.parse(rows[k].Ingredients);
+		} else {
+			console.log('[MySql - Food] No ingredients list found for this id');
+		}
+		resp.push(rows[k]);
+	}
+	return resp;
+}
+function isNumber(n) {
+	return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
+}

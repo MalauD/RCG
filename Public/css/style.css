@@ -65,8 +65,31 @@ body {
     font-size: 4vh;
 }
 
-.FoodSearch {
+.SearchBar {
+    display: flex;
+    padding: 0px;
     margin: 3px 40px;
+    background-color: rgba(245, 245, 245, 0.664);
+    border-radius: 8px;
+}
+
+.Selector {
+    border: 1px solid rgb(237, 239, 241);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    color: grey;
+    font-size: 12px;
+    text-align: center;
+    padding: 10px;
+}
+
+.Selector-items {
+    background-color: rgba(245, 245, 245, 0.664);
+    text-align: center;
+}
+
+.FoodSearch {
+    margin: 0px;
     font-size: 16px;
     color: grey;
     text-align: center;
@@ -74,8 +97,11 @@ body {
     width: 40vw;
     flex: 1;
     border: 1px solid rgb(237, 239, 241);
+    border-left: 0px;
     border-radius: 8px;
-    background-color: rgba(245, 245, 245, 0.664);
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background-color: transparent;
     padding: 4px 4px;
 }
 
@@ -255,17 +281,25 @@ body {
     border: 1px solid transparent;
     background-color: transparent;
     float: left;
-    height: auto;
-    width: 45%;
+    width: 50%;
     border-radius: 10px;
     transition: width 0.1s, height 0.1s;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05), 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+}
+
+.Card:after {
+
+    content: "";
+    display: block;
+
 }
 
 .Card img {
     float: left;
     width: 100%;
     height: auto;
+    max-height: 30vh;
+    object-fit: cover;
     border-radius: 10px 10px 0px 0px;
 }
 
@@ -725,7 +759,7 @@ body {
 .BackgroundContainer {
     height: auto;
     width: 100vw;
-    background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%);
+    background-image: white;
 }
 
 .textContainer h1 {
@@ -791,6 +825,28 @@ body {
 
 }
 
+.RecipeStep h6 {
+    padding: 0px 0px 0px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.ColumnDiv {
+    display: flex;
+    flex-direction: column;
+    text-overflow: clip;
+}
+
+.RowDiv {
+    display: flex;
+    flex-direction: row;
+    text-overflow: clip;
+}
+
+.Espacer {
+    padding: 4%;
+}
+
 @media screen and (max-width: 800px) {
 
 
@@ -852,7 +908,7 @@ body {
     }
 
     .Card {
-        width: 100%
+        width: 200px
     }
 
     .Card p {

@@ -28,7 +28,10 @@ class FoodListItemConnected extends React.Component {
 		if (this.props.Context == VIEW) {
 			Axios.get('/Ingredients/Search/id/' + this.props.id)
 				.then(res => {
-					this.setState({ name: res.data.FOOD_NAME, sciname: res.data.SCIENTIFIC_NAME });
+					this.setState({
+						name: res.data.FOOD_NAME,
+						sciname: res.data.SCIENTIFIC_NAME
+					});
 				})
 				.catch(() => {});
 		}
@@ -38,13 +41,13 @@ class FoodListItemConnected extends React.Component {
 		return (
 			<div className="FoodListItem">
 				<div className="RowContainer" style={{ height: 'auto' }}>
-					<div style={{ float: 'left', clear: 'both' }} onClick={this.OnElementClick}>
-						<p>{this.props.Context != VIEW ? this.props.name : this.state.name}</p>
-						<p className="FoodListSec">
-							{this.props.Context != VIEW ? this.props.sciname : this.state.sciname}
-						</p>
+					<div onClick={this.OnElementClick}>
+						<div style={{ float: 'left', clear: 'both' }}>
+							<p>{this.props.Context != VIEW ? this.props.name : this.state.name}</p>
+							<p className="FoodListSec">{this.props.Context != VIEW ? this.props.sciname : this.state.sciname}</p>
+						</div>
+						<div style={{ flexGrow: 4 }} />
 					</div>
-					<div style={{ flexGrow: 4 }} />
 					{this.props.Context == CREATION_VIEW && (
 						<input
 							style={{
@@ -62,9 +65,16 @@ class FoodListItemConnected extends React.Component {
 							onKeyPress={this.HandleKeyPress}
 						/>
 					)}
+
 					{this.props.Context == VIEW && <p className="FoodListSec">{this.props.qty}</p>}
 					{!(this.props.Context == VIEW || this.props.Context == SVIEW) && (
-						<div style={{ float: 'right', clear: 'both', flexGrow: '2' }}>
+						<div
+							style={{
+								float: 'right',
+								clear: 'both',
+								flexGrow: '2'
+							}}
+						>
 							<p onClick={this.OnItemClick} className="plusSign">
 								{this.props.Context == CREATION ? '+' : '-'}
 							</p>
@@ -78,7 +88,11 @@ class FoodListItemConnected extends React.Component {
 	OnItemClick = () => {
 		if (this.props.Context == CREATION)
 			this.props.AddItem(
-				{ id: this.props.id, name: this.props.name, sciname: this.props.sciname },
+				{
+					id: this.props.id,
+					name: this.props.name,
+					sciname: this.props.sciname
+				},
 				CREATION_VIEW
 			);
 		else if (this.props.Context == CREATION_VIEW) this.props.RemoveItem(this.props.id, CREATION_VIEW);

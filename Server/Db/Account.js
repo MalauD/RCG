@@ -3,7 +3,7 @@ var db = require('./Db');
 module.exports = {
 	GetUserAccountById: (Id, callback) => {
 		const query =
-			'SELECT name, mail, rank, ImageLink FROM usersid WHERE uidkey = ?';
+			'SELECT name, mail, rank,userhash ,ImageLink FROM usersid WHERE uidkey = ?';
 		console.log('[MySql - Account] Getting user by id');
 		db.query(query, [Id], (err, rows, field) => {
 			if (err) {

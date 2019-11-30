@@ -34,6 +34,8 @@ export function UpdateImage(ImageLink) {
 export const REQUEST_FOOD_SEARCH = 'REQUEST_FOOD_SEARCH';
 export const REQUEST_UNCHECKED_FOOD = 'REQUEST_UNCHECKED_FOOD';
 export const REQUEST_CONTRIB_FOOD = 'REQUEST_CONTRIB_FOOD';
+export const REQUEST_USER_CONTRIB_FOOD = 'REQUEST_USER_CONTRIB_FOOD';
+export const REQUEST_FOOD_OF_INGREDIENT = 'REQUEST_FOOD_OF_INGREDIENT';
 export const RECEIVE_FOOD = 'RECEIVE_FOOD_SEARCH';
 export const FAIL_FOOD = 'FAIL_FOOD';
 
@@ -55,6 +57,20 @@ export function RequestUncheckedFood() {
 export function RequestContribFood() {
 	return {
 		type: REQUEST_CONTRIB_FOOD,
+		RequestedAt: Date.now()
+	};
+}
+
+export function RequestUserContribFood() {
+	return {
+		type: REQUEST_USER_CONTRIB_FOOD,
+		RequestedAt: Date.now()
+	};
+}
+
+export function RequestFoodOfIngredient() {
+	return {
+		type: REQUEST_FOOD_OF_INGREDIENT,
 		RequestedAt: Date.now()
 	};
 }

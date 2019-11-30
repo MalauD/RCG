@@ -1,12 +1,5 @@
 const app = (module.exports = require('express')());
-const {
-	GetMealByName,
-	GetMealById,
-	GetUserContrib,
-	GetUncheckedMeals,
-	GetTrendingMealByRCG,
-	CreateMeal
-} = require('./../Actions/index').Meal;
+const { GetMealByName, GetMealById, GetUserContrib, GetMealByIngredientId, GetUncheckedMeals, GetTrendingMealByRCG, GetTrendingMealByRandom, CreateMeal } = require('./../Actions/index').Meal;
 const UploadMulter = require('./../FileManager').UploadManager;
 
 app.get('/Search/Name/:query', (req, res) => {
@@ -21,6 +14,16 @@ app.get('/Search/Name/:query', (req, res) => {
 
 app.get('/Search/Id/:id', (req, res) => {
 	GetMealById(req.params.id, req.query.Checked, req.session)
+		.then(DbResult => {
+			res.json(DbResult);
+		})
+		.catch(() => {
+			res.sendStatus(500);
+		});
+});
+
+app.post('/ByIngredient', (req, res) => {
+	GetMealByIngredientId(req.body.IngredientsId)
 		.then(DbResult => {
 			res.json(DbResult);
 		})
@@ -52,6 +55,16 @@ app.get('/Unchecked', (req, res) => {
 
 app.get('/Trending/rcg', (req, res) => {
 	GetTrendingMealByRCG()
+		.then(DbResult => {
+			res.json(DbResult);
+		})
+		.catch(() => {
+			res.sendStatus(500);
+		});
+});
+
+app.get('/Trending/random', (req, res) => {
+	GetTrendingMealByRandom()
 		.then(DbResult => {
 			res.json(DbResult);
 		})

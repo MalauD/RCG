@@ -1,11 +1,5 @@
-import {
-	REQUEST_FOOD_SEARCH,
-	RECEIVE_FOOD,
-	FAIL_FOOD,
-	REQUEST_UNCHECKED_FOOD,
-	REQUEST_CONTRIB_FOOD
-} from '../Actions/Action';
-import { SEARCH, ADMIN, CONTRIB } from '../Constants/SearchTypes';
+import { REQUEST_FOOD_SEARCH, RECEIVE_FOOD, FAIL_FOOD, REQUEST_UNCHECKED_FOOD, REQUEST_CONTRIB_FOOD, REQUEST_USER_CONTRIB_FOOD, REQUEST_FOOD_OF_INGREDIENT } from '../Actions/Action';
+import { SEARCH, ADMIN, CONTRIB, USER_CONTRIB, FOOD_INGREDIENT } from '../Constants/SearchTypes';
 
 const InitialState = {
 	SearchQuery: '',
@@ -51,6 +45,24 @@ export default function FoodSearchReducer(state = InitialState, action) {
 				RequestedAt: action.RequestedAt,
 				IsCheckedFood: true,
 				SearchType: CONTRIB,
+				Errors: {}
+			});
+		case REQUEST_USER_CONTRIB_FOOD:
+			return Object.assign({}, state, {
+				IsFetching: true,
+				SearchQuery: '',
+				RequestedAt: action.RequestedAt,
+				IsCheckedFood: true,
+				SearchType: USER_CONTRIB,
+				Errors: {}
+			});
+		case REQUEST_FOOD_OF_INGREDIENT:
+			return Object.assign({}, state, {
+				IsFetching: true,
+				SearchQuery: '',
+				RequestedAt: action.RequestedAt,
+				IsCheckedFood: true,
+				SearchType: FOOD_INGREDIENT,
 				Errors: {}
 			});
 		case RECEIVE_FOOD:

@@ -4,7 +4,11 @@ import { ADMIN } from '../../Constants/SearchTypes';
 import axios from 'axios';
 
 import { connect } from 'react-redux';
-import { RequestUncheckedFood, ReceiveFood, FailFood } from '../../Actions/Action';
+import {
+	RequestUncheckedFood,
+	ReceiveFood,
+	FailFood
+} from '../../Actions/Action';
 
 const mapStateToProps = state => {
 	return { IsFetching: state.FoodSearchReducer.IsFetching };
@@ -26,8 +30,9 @@ class AdminPageConnected extends React.Component {
 	render() {
 		return (
 			<div className="AccountContent">
-				<p className="ContribTitle">Administration flow</p>
-				<p id="AccountMail">Please check this card</p>
+				<p className="FoodLabel" style={{ fontSize: '28px' }}>
+					Administration flow
+				</p>
 				<FoodContainer SearchTypeParent={ADMIN} />
 			</div>
 		);

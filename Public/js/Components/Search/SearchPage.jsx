@@ -44,10 +44,11 @@ class SearchPageConnected extends React.Component {
 	};
 
 	APISearch = () => {
-		//Get qury params and make an api search
+		//Get qeury params and make an api search
 		const values = queryString.parse(this.props.location.search);
+
 		//Check if the client is not currently fetching stg and also sea if the search query has changed
-		if (!this.props.IsFetching && values.q != this.props.SearchQuery) {
+		if (!this.props.IsFetching && values.q != this.props.SearchQuery && values.type == 'Name') {
 			//dispatch to redux a request action before performing an api call
 			this.props.RequestFoodSearch(values.q);
 			//perform the call

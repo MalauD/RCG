@@ -1,8 +1,6 @@
-const {
-	GetUserAccountById,
-	UpdateUserImage,
-	GetUserAccountByHash
-} = require('./../Db').Account;
+const { GetUserAccountById, UpdateUserImage, GetUserAccountByHash } = require('./../Db').Account;
+
+const { QueryDBForContrib } = require('./../Db').Meal;
 
 module.exports = {
 	GetAccount: Session => {
@@ -27,7 +25,16 @@ module.exports = {
 							reject(err);
 							return;
 						}
-						resolve(result);
+						QueryDBForContrib(result.userhash, (err2, result2) => {
+							if (err2) {
+								reject(err2);
+								return;
+							}
+							Object.assign(result, {
+								Contrib: result2
+							});
+							resolve(result);
+						});
 				  })
 				: reject();
 		});

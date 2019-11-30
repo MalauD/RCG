@@ -13,6 +13,7 @@ class MealStepCreator extends React.Component {
 					Enter recipe steps
 				</p>
 				<textarea
+				
 					name="Recipe"
 					type="text"
 					style={{ height: '5rem' }}
@@ -20,7 +21,11 @@ class MealStepCreator extends React.Component {
 					placeholder="Enter your recipe step for this meal"
 					onChange={this.OnChangeMealRecipe}
 				/>
-				<button type="button" className="AppendMealStep" onClick={this.OnAddStep}>
+				<button
+					type="button"
+					className="AppendMealStep"
+					onClick={this.OnAddStep}
+				>
 					Add a step
 				</button>
 				<p className="LoginLabel" style={{ marginTop: '8px' }}>
@@ -29,7 +34,13 @@ class MealStepCreator extends React.Component {
 				<div>
 					{this.state.MealRecipeSteps.map(Step => {
 						return (
-							<StepRecipeElement key={Step.Number} StepNumber={Step.Number} StepRecipe={Step.Recipe} />
+							<StepRecipeElement
+								key={Step.Number}
+								StepNumber={Step.Number}
+								StepRecipe={Step.Recipe}
+								IsCreation={true}
+								HandleDelete={this.HandleDelete}
+							/>
 						);
 					})}
 				</div>
@@ -42,13 +53,24 @@ class MealStepCreator extends React.Component {
 	};
 
 	OnAddStep = () => {
-		if (this.state.MealRecipe) {
-			this.AppendMealStepToRecipe({ Number: this.state.MealStepNumber, Recipe: this.state.MealRecipe });
+			this.AppendMealStepToRecipe({
+				Number: this.state.MealStepNumber,
+				Recipe: this.state.MealRecipe
+			});
 			this.setState(prevState => ({
 				MealStepNumber: prevState.MealStepNumber + 1,
 				MealRecipe: ''
 			}));
 		}
+	};
+
+
+	HandleDelete = n => {
+		this.setState({
+			MealRecipeSteps: this.state.MealRecipeSteps.filter(
+				obj => obj.Number != n
+			)
+		});
 	};
 
 	AppendMealStepToRecipe = step => {

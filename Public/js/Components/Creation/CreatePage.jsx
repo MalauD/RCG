@@ -62,9 +62,7 @@ class CreatePageConnected extends React.Component {
 				.array()
 				.of(
 					yup.object({
-						qty: yup
-							.string('Ingredient quantity must be a string')
-							.required('Ingredient quantity is required')
+						qty: yup.string('Ingredient quantity must be a string').required('Ingredient quantity is required')
 					})
 				)
 				.required('A list of ingredient is required')
@@ -75,29 +73,15 @@ class CreatePageConnected extends React.Component {
 			<div>
 				<div className="AccountContent">
 					<form onSubmit={this.OnSubmitClick}>
-						<p className="ContribTitle">Create a new meal</p>
+						<p className="FoodLabel" style={{ fontSize: '28px' }}>
+							Create a new meal
+						</p>
 						<div className="CreateContent">
 							<p className="LoginLabel" style={{ marginTop: '4px' }}>
 								Meal Description
 							</p>
-							<input
-								type="text"
-								name="Name"
-								className="CreateElement"
-								style={{ width: '50%' }}
-								placeholder="The title of the meal"
-								onChange={this.OnChangeMealName}
-							/>
-							<input
-								className="CreateElement"
-								name="RCG"
-								placeholder="RCG rating (0 - 20)"
-								style={{ width: '25%' }}
-								type="number"
-								min="0"
-								max="20"
-								onChange={this.OnChangeMealRCG}
-							/>
+							<input type="text" name="Name" className="CreateElement" style={{ width: '50%' }} placeholder="The title of the meal" onChange={this.OnChangeMealName} />
+							<input className="CreateElement" name="RCG" placeholder="RCG rating (0 - 20)" style={{ width: '25%' }} type="number" min="0" max="20" onChange={this.OnChangeMealRCG} />
 
 							<input
 								className="CreateElement"
@@ -110,20 +94,16 @@ class CreatePageConnected extends React.Component {
 							/>
 
 							<MealStepCreator
-								OnElementAdded={elementsarray => this.setState({ MealRecipeSteps: elementsarray })}
+								OnElementAdded={elementsarray =>
+									this.setState({
+										MealRecipeSteps: elementsarray
+									})
+								}
 							/>
 							<p className="LoginLabel" style={{ marginTop: '8px' }}>
 								Select ingredients
 							</p>
-							<input
-								className="CreateElement"
-								name="NmberOfpers"
-								placeholder="For how many people ?"
-								style={{ width: '25%' }}
-								type="number"
-								min="0"
-								onChange={this.OnChangeMealPers}
-							/>
+							<input className="CreateElement" name="NmberOfpers" placeholder="For how many people ?" style={{ width: '25%' }} type="number" min="0" onChange={this.OnChangeMealPers} />
 							<div className="RowContainer" style={{ margin: '10px' }}>
 								<FoodListSelector />
 								<IngredientsList IsCreation={true} />
@@ -131,16 +111,13 @@ class CreatePageConnected extends React.Component {
 							<p className="LoginLabel" style={{ marginTop: '8px' }}>
 								Upload an image
 							</p>
-							<input
-								type="file"
-								className="UploadMeal"
-								accept="image/*"
-								name="ImageFile"
-								ref={this.fileInput}
-							/>
+							<input type="file" className="UploadMeal" accept="image/*" name="ImageFile" ref={this.fileInput} />
 							<input
 								type="submit"
-								style={{ marginBottom: '10px', borderRadius: '5px' }}
+								style={{
+									marginBottom: '10px',
+									borderRadius: '5px'
+								}}
 								className="LoginButton"
 								value="Submit"
 							/>
@@ -203,8 +180,10 @@ class CreatePageConnected extends React.Component {
 						//If there is no html error redirect to the homepage (user logged in)
 						// Other wise display errors
 						if (result.ok) {
+							this.props.history.push('/Success');
 							if (result.json().CreateStatus) {
 								this.props.history.push('/');
+								
 							} else {
 								return;
 							}

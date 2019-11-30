@@ -3,15 +3,14 @@ const {
 	QueryDBForMealByID,
 	QueryDBForMealUnchecked,
 	QueryDBForContrib,
+	QueryDBForFoodByIngredientsID,
 	GetBestRCGMeal,
+	GetRandomMeal,
 	AddFoodToPendingDB
 } = require('./../Db/index').Meal;
 const { GetUserAccountByHash } = require('./../Db').Account;
-const CreateFormShem = require('./../Authentification/Verifications')
-	.CreateFormShem;
-const {
-	IsUserAnAdmin
-} = require('./../UserVerifications/UserStateVerification');
+const CreateFormShem = require('./../Authentification/Verifications').CreateFormShem;
+const { IsUserAnAdmin } = require('./../UserVerifications/UserStateVerification');
 
 module.exports = {
 	GetMealByName: Name => {
@@ -47,19 +46,16 @@ module.exports = {
 							reject(err);
 							return;
 						}
-						GetUserAccountByHash(
-							result.userhash,
-							(err2, result2) => {
-								if (err2) {
-									reject(err2);
-									return;
-								}
-								Object.assign(result, {
-									Creator: result2
-								});
-								resolve(result);
+						GetUserAccountByHash(result.userhash, (err2, result2) => {
+							if (err2) {
+								reject(err2);
+								return;
 							}
-						);
+							Object.assign(result, {
+								Creator: result2
+							});
+							resolve(result);
+						});
 				  })
 				: reject();
 		});
@@ -75,19 +71,16 @@ module.exports = {
 							reject(err);
 							return;
 						}
-						GetUserAccountByHash(
-							result.userhash,
-							(err2, result2) => {
-								if (err2) {
-									reject(err2);
-									return;
-								}
-								Object.assign(result, {
-									Creator: result2
-								});
-								resolve(result);
+						GetUserAccountByHash(result.userhash, (err2, result2) => {
+							if (err2) {
+								reject(err2);
+								return;
 							}
-						);
+							Object.assign(result, {
+								Creator: result2
+							});
+							resolve(result);
+						});
 				  })
 				: reject();
 		});
@@ -108,7 +101,7 @@ module.exports = {
 
 	GetTrendingMealByRCG: () => {
 		return new Promise((resolve, reject) => {
-			GetBestRCGMeal(5, (err, result) => {
+			GetBestRCGMeal(3, (err, result) => {
 				if (err) {
 					reject(err);
 				}
@@ -117,6 +110,27 @@ module.exports = {
 		});
 	},
 
+	GetMealByIngredientId: IngredientsIDs => {
+		return new Promise((resolve, reject) => {
+			QueryDBForFoodByIngredientsID(IngredientsIDs, (err, result) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(result);
+			});
+		});
+	},
+
+	GetTrendingMealByRandom: () => {
+		return new Promise((resolve, reject) => {
+			GetRandomMeal(3, (err, result) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(result);
+			});
+		});
+	},
 	CreateMeal: (Body, UploadFile, UserSession) => {
 		return new Promise((resolve, reject) => {
 			//Parse Recipe + ingredients
@@ -138,27 +152,18 @@ module.exports = {
 					console.log('[Create - Food] Got a new food submit');
 					console.log('[Create - Food]  Name:' + Body.Name);
 					console.log('[Create - Food]  RCG:' + Body.RCG);
-					console.log(
-						'[Create - Food] Image saved as ' + UploadFile.filename
-					);
+					console.log('[Create - Food] Image saved as ' + UploadFile.filename);
 					let FoodImageLink = '/FoodImage/' + UploadFile.filename;
-					console.log(
-						'[Create - Food] Image saved in ' + FoodImageLink
-					);
-					AddFoodToPendingDB(
-						Body,
-						UserSession.hash,
-						FoodImageLink,
-						err => {
-							if (err) {
-								console.log(err);
-								reject(err);
-								return;
-							}
-							resolve();
+					console.log('[Create - Food] Image saved in ' + FoodImageLink);
+					AddFoodToPendingDB(Body, UserSession.hash, FoodImageLink, err => {
+						if (err) {
+							console.log(err);
+							reject(err);
 							return;
 						}
-					);
+						resolve();
+						return;
+					});
 					return;
 				}
 				reject();

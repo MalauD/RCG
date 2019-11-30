@@ -11,10 +11,19 @@ class StepRecipeElement extends React.Component {
 					{this.props.StepNumber}
 				</p>
 				<div className="vl" />
+
 				<p className="MealStep">{this.props.StepRecipe}</p>
+				<div style={{ flexGrow: 4 }} />
+				{this.props.IsCreation && (
+					<h6 onClick={this.OnDeleteClick}>X</h6>
+				)}
 			</div>
 		);
 	}
+
+	OnDeleteClick = () => {
+		this.props.HandleDelete(this.props.StepNumber);
+	};
 }
 
 export default StepRecipeElement;

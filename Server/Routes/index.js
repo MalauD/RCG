@@ -43,7 +43,17 @@ app.get('/', (req, res) => {
 	res.sendFile('/home/pi/RCGWebsite/Public/index.html');
 });
 
-app.use(express.static('/home/pi/RCGWebsite/Public/'));
+var staticPath = '/home/pi/RCGWebsite/Public/';
+
+app.use(express.static(staticPath));
+
+app.use((req, res, next) => {
+	console.log();
+	console.log(
+		'[Path - Log] ' + req.url + ' -- Request by ' + req.session.name
+	);
+	next();
+});
 
 app.use('/Meals', require('./Meals'));
 app.use('/Ingredients', require('./Ingredients'));

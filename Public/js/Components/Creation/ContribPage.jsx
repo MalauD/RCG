@@ -5,11 +5,16 @@ import { CONTRIB } from '../../Constants/SearchTypes';
 import axios from 'axios';
 
 import { connect } from 'react-redux';
-import { ReceiveFood, FailFood, RequestContribFood } from '../../Actions/Action';
+import {
+	ReceiveFood,
+	FailFood,
+	RequestContribFood
+} from '../../Actions/Action';
 
 const mapStateToProps = state => {
 	return { IsFetching: state.FoodSearchReducer.IsFetching };
 };
+
 
 function mapDispatchToProps(dispatch) {
 	return {
@@ -28,10 +33,17 @@ class ContribPageConnected extends React.Component {
 		return (
 			<div>
 				<div className="AccountContent">
-					<p className="ContribTitle">Your Contributions</p>
+					<p className="FoodLabel" style={{ fontSize: '28px' }}>
+						Your Contributions
+					</p>
 					<FoodContainer SearchTypeParent={CONTRIB} />
-					<Link to="/Create" style={{ left: '50%' }} className="LoginLink">
-						It seems that you reach the end of your contributions. Click to create new ones
+					<Link
+						to="/Create"
+						style={{ left: '50%' }}
+						className="LoginLink"
+					>
+						It seems that you reach the end of your contributions.
+						Click to create new ones
 					</Link>
 				</div>
 			</div>

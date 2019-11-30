@@ -4,5 +4,10 @@
 	"prettier.tabWidth": 4,
 	"prettier.useTabs": true,
 	"editor.formatOnSave": true,
-	"line-counter.excludes": ["**/.vscode/**", "**/node_modules/**"]
+	"line-counter.excludes": [
+		"**/.vscode/**",
+		"**/node_modules/**"
+	],
+	"git.ignoreLimitWarning": true,
+	"prettier.printWidth": 200
 }

@@ -24,9 +24,14 @@ class TopNavConnected extends React.Component {
 		//State for the current value on the search bar
 		this.state = {
 			inputSearch: '',
-			APIResponse: ''
+			APIResponse: '',
+			SelectValue: 0
 		};
 	}
+
+	OnChange = evt => {
+		this.setState({ SelectValue: evt.target.value });
+	};
 
 	render = () => {
 		return (
@@ -34,25 +39,28 @@ class TopNavConnected extends React.Component {
 				{/* <img src="/Logo.png" alt="logo" onClick={this.OnLogoClick} /> */}
 				<div className="ConboRow">
 					<img src="logoHugo.png" onClick={this.OnLogoClick} />
-					<input
-						type="text"
-						id="search"
-						className="FoodSearch"
-						name="Search"
-						placeholder="Search for food and way more !"
-						autoComplete="off"
-						value={this.state.inputSearch}
-						onKeyPress={this.HandleKeyPressed}
-						onChange={this.HandleSearchChange}
-					/>
+					<div className="SearchBar">
+						<select className="Selector" value={this.state.SelectValue} onChange={this.OnChange}>
+							<option value="0">Name</option>
+							<option value="1">Ingredients</option>
+						</select>
+						<input
+							type="text"
+							id="search"
+							className="FoodSearch"
+							name="Search"
+							placeholder="Search for food and way more !"
+							autoComplete="off"
+							value={this.state.inputSearch}
+							onKeyPress={this.HandleKeyPressed}
+							onChange={this.HandleSearchChange}
+						/>
+					</div>
 				</div>
 				{this.props.IsLogged == true ? (
 					<React.Fragment>
 						<Link to="/Contrib">
-							<p
-								className="topnavLink "
-								style={{ float: 'right' }}
-							>
+							<p className="topnavLink " style={{ float: 'right' }}>
 								Contributions
 							</p>
 						</Link>
@@ -73,8 +81,11 @@ class TopNavConnected extends React.Component {
 
 	HandleKeyPressed = e => {
 		if (e.key == 'Enter') {
-			//Check when the key enter is pressed and redirect the page with search fields
-			this.props.history.push('/Search?q=' + this.state.inputSearch);
+			if (this.state.SelectValue == 0) {
+				//Check when the key enter is pressed and redirect the page with search fields
+				this.props.history.push('/Search?q=' + this.state.inputSearch + '&type=Name');
+			} else if (this.state.SelectValue == 1) {
+			}
 		}
 	};
 
